@@ -43,5 +43,12 @@ namespace Recycle.Models
 
         [Display(Name = "Is Active?")]
         public bool IsActive { get; set; }
+
+
+        // Tables relationship
+        public Store Store { get; set; }
+
+        public List<ProductsComment> ProductsComments { get; set; }
+        public List<StoreComment> StoreComments { get; set; }
     }
 }
