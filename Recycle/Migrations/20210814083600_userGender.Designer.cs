@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recycle.Data;
 
 namespace Recycle.Migrations
 {
     [DbContext(typeof(RecycleContext))]
-    partial class RecycleContextModelSnapshot : ModelSnapshot
+    [Migration("20210814083600_userGender")]
+    partial class userGender
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,7 +45,7 @@ namespace Recycle.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -87,17 +89,10 @@ namespace Recycle.Migrations
             modelBuilder.Entity("Recycle.Models.User", b =>
                 {
                     b.HasOne("Recycle.Models.UserGender", "Gender")
-                        .WithMany("Users")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany()
+                        .HasForeignKey("GenderId");
 
                     b.Navigation("Gender");
-                });
-
-            modelBuilder.Entity("Recycle.Models.UserGender", b =>
-                {
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

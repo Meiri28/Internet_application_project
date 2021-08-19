@@ -10,22 +10,22 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
-    public class UsersController : Controller
+    public class UserGendersController : Controller
     {
         private readonly RecycleContext _context;
 
-        public UsersController(RecycleContext context)
+        public UserGendersController(RecycleContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: UserGenders
         public async Task<IActionResult> Index()
         {
-            return View(await _context.User.ToListAsync());
+            return View(await _context.UserGender.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: UserGenders/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,42 +33,39 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var userGender = await _context.UserGender
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (userGender == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(userGender);
         }
 
-        // GET: Users/Create
+        // GET: UserGenders/Create
         public IActionResult Create()
         {
-            ViewBag.UserGender = new SelectList(_context.Set<UserGender>(), nameof(UserGender.Id), nameof(UserGender.Title));
             return View();
         }
 
-        // POST: Users/Create
+        // POST: UserGenders/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Password,BDay")] User user, int Gender)
+        public async Task<IActionResult> Create([Bind("Id,Title")] UserGender userGender)
         {
             if (ModelState.IsValid)
             {
-                user.Gender = _context.UserGender.First(x => x.Id == Gender);
-                user.UpdatedAt = user.CreatedAt;
-                _context.Add(user);
+                _context.Add(userGender);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(userGender);
         }
 
-        // GET: Users/Edit/5
+        // GET: UserGenders/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,22 +73,22 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User.FindAsync(id);
-            if (user == null)
+            var userGender = await _context.UserGender.FindAsync(id);
+            if (userGender == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(userGender);
         }
 
-        // POST: Users/Edit/5
+        // POST: UserGenders/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,Password,Gender,BDay,Balance")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Title")] UserGender userGender)
         {
-            if (id != user.Id)
+            if (id != userGender.Id)
             {
                 return NotFound();
             }
@@ -100,13 +97,12 @@ namespace Recycle.Controllers
             {
                 try
                 {
-                    user.UpdatedAt = DateTime.Now;
-                    _context.Update(user);
+                    _context.Update(userGender);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
+                    if (!UserGenderExists(userGender.Id))
                     {
                         return NotFound();
                     }
@@ -117,10 +113,10 @@ namespace Recycle.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(userGender);
         }
 
-        // GET: Users/Delete/5
+        // GET: UserGenders/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,30 +124,30 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var user = await _context.User
+            var userGender = await _context.UserGender
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (user == null)
+            if (userGender == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(userGender);
         }
 
-        // POST: Users/Delete/5
+        // POST: UserGenders/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.User.FindAsync(id);
-            _context.User.Remove(user);
+            var userGender = await _context.UserGender.FindAsync(id);
+            _context.UserGender.Remove(userGender);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool UserGenderExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
+            return _context.UserGender.Any(e => e.Id == id);
         }
     }
 }
