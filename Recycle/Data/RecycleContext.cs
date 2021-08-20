@@ -17,5 +17,11 @@ namespace Recycle.Data
         public DbSet<Recycle.Models.User> User { get; set; }
 
         public DbSet<Recycle.Models.UserGender> UserGender { get; set; }
+
+        public DbSet<Recycle.Models.Store> Store { get; set; }
+
+        public DbSet<Recycle.Models.StoreComment> StoreComment { get; set; }
+
+        public DbSet<Recycle.Models.ProductsComment> ProductsComment { get; set; }
     }
 }
