@@ -18,14 +18,13 @@ namespace Recycle.Data
 
         public DbSet<Recycle.Models.UserGender> UserGender { get; set; }
 
-<<<<<<< HEAD
         public DbSet<Recycle.Models.Admin> Admin { get; set; }
-=======
+
         public DbSet<Recycle.Models.Store> Store { get; set; }
 
         public DbSet<Recycle.Models.StoreComment> StoreComment { get; set; }
 
         public DbSet<Recycle.Models.ProductsComment> ProductsComment { get; set; }
->>>>>>> Store
+
     }
 }
