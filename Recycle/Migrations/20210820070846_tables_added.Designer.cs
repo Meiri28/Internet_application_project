@@ -10,7 +10,7 @@ using Recycle.Data;
 namespace Recycle.Migrations
 {
     [DbContext(typeof(RecycleContext))]
-    [Migration("20210819144939_tables_added")]
+    [Migration("20210820070846_tables_added")]
     partial class tables_added
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
