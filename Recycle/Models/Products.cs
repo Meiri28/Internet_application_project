@@ -15,6 +15,7 @@ namespace Recycle.Models
         [Required]
         [Display(Name = "Store ID")]
         public int StoreId { get; set; }
+        public Store Store{ get; set; }
 
         [Required]
         public string ItemName { get; set; }
@@ -40,5 +41,9 @@ namespace Recycle.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public DateTime UpdatedAt { get; set; }
+
+
+        // Tables relationship
+        public List<ProductsComment> comments { get; set; }
     }
 }

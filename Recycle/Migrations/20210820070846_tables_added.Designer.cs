@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recycle.Data;
 
 namespace Recycle.Migrations
 {
     [DbContext(typeof(RecycleContext))]
-    partial class RecycleContextModelSnapshot : ModelSnapshot
+    [Migration("20210820070846_tables_added")]
+    partial class tables_added
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -19,32 +21,13 @@ namespace Recycle.Migrations
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Recycle.Models.Admin", b =>
-=======
             modelBuilder.Entity("Recycle.Models.Products", b =>
->>>>>>> Store
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-<<<<<<< HEAD
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admin");
-=======
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -185,7 +168,6 @@ namespace Recycle.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("StoreComment");
->>>>>>> Store
                 });
 
             modelBuilder.Entity("Recycle.Models.User", b =>
