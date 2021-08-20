@@ -307,3 +307,8 @@ C:\Users\97250\Source\Repos\Internet_application_project\Recycle\obj\Debug\net5.
 C:\Users\97250\Source\Repos\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Details.cshtml.g.cs
 C:\Users\97250\Source\Repos\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Edit.cshtml.g.cs
 C:\Users\97250\Source\Repos\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Index.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Create.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Delete.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Details.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Edit.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Index.cshtml.g.cs

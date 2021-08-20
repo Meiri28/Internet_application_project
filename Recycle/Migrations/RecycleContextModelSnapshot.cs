@@ -43,7 +43,7 @@ namespace Recycle.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -88,9 +88,7 @@ namespace Recycle.Migrations
                 {
                     b.HasOne("Recycle.Models.UserGender", "Gender")
                         .WithMany("Users")
-                        .HasForeignKey("GenderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GenderId");
 
                     b.Navigation("Gender");
                 });
