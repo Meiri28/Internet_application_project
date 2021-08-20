@@ -312,3 +312,8 @@ C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debu
 C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Details.cshtml.g.cs
 C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Edit.cshtml.g.cs
 C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\UserGenders\Index.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\Admins\Create.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\Admins\Delete.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\Admins\Details.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\Admins\Edit.cshtml.g.cs
+C:\Users\User\Source\Repos\Meiri28\Internet_application_project\Recycle\obj\Debug\net5.0\Razor\Views\Admins\Index.cshtml.g.cs
