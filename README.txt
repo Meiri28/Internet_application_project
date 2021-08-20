@@ -26,3 +26,13 @@ ip - 127.0.0.1
 port - 1433
 user - sa
 pass - MyPass@word
+
+
+
+git ignore -
+
+need to add folder for example -
+Recycle/obj/
+
+then run - 
+git rm -r --cached Recycle/obj

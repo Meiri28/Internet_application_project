@@ -33,5 +33,6 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-obj/
+
+Recycle/bin/
 Recycle/obj/
