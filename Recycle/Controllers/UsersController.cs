@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +14,7 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
+    [Authorize]
     public class UsersController : Controller
     {
         private readonly RecycleContext _context;
@@ -20,6 +25,7 @@ namespace Recycle.Controllers
         }
 
         // GET: Users
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.User.ToListAsync());
@@ -69,6 +75,7 @@ namespace Recycle.Controllers
         }
 
         // GET: Users/Edit/5
+        
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -146,6 +153,54 @@ namespace Recycle.Controllers
             var user = await _context.User.FindAsync(id);
             _context.User.Remove(user);
             await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Users/LogIn\
+        [AllowAnonymous]
+        public async Task<IActionResult> LogIn()
+        {
+
+            return View();
+        }
+
+        // POST: Users/LogIn
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public async Task<IActionResult> LogIn(string Email,string Password)
+        {
+            var users = from u in _context.User
+                       where u.Email == Email && u.Password == Password
+                       select u;
+            if(users.Count() == 0)
+            {
+                //username or passward is incorrect
+                return View();
+
+            }
+            var account = users.First();
+
+            var claims = new List<Claim> {
+                                            new Claim(ClaimTypes.Email, account.Email),
+                                            new Claim(ClaimTypes.Name, account.FirstName),
+                                            new Claim(ClaimTypes.Role, "User")
+            }; 
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+            };
+             HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                           new ClaimsPrincipal(claimsIdentity),authProperties);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> LogOut()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
             return RedirectToAction(nameof(Index));
         }
 

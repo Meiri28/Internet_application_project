@@ -10,6 +10,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Recycle.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Recycle
 {
@@ -29,6 +30,18 @@ namespace Recycle
 
             services.AddDbContext<RecycleContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("RecycleContext")));
+
+            services.AddSession(options =>
+                {
+                    options.IdleTimeout = TimeSpan.FromMinutes(10);
+                }
+            );
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                options =>
+                {
+                    options.LoginPath = "/Users/LogIn";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,6 +62,8 @@ namespace Recycle
 
             app.UseRouting();
 
+            app.UseSession();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
