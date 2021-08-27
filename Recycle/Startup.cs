@@ -41,6 +41,7 @@ namespace Recycle
                 options =>
                 {
                     options.LoginPath = "/Users/LogIn";
+                    options.AccessDeniedPath = "/Users/LogIn";
                 });
         }
 
