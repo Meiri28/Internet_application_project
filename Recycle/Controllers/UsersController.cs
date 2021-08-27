@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +72,7 @@ namespace Recycle.Controllers
                 user.Gender = _context.UserGender.First(x => x.Id == Gender);
                 user.UpdatedAt = user.CreatedAt;
                 user.IsActive = true;
+                user.Password = hash_passwrd(user.Password);
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -173,9 +176,10 @@ namespace Recycle.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LogIn(string Email,string Password)
         {
+            string hashed_password = hash_passwrd(Password);
             var users = from user in _context.User
-                       where user.IsActive && user.Email == Email && user.Password == Password
-                       select user;
+                       where user.IsActive && user.Email == Email && user.Password == hashed_password
+                        select user;
             if(users.Count() == 0)
             {
                 //username or passward is incorrect
@@ -184,7 +188,7 @@ namespace Recycle.Controllers
             }
             var account = users.First();
 
-            String Role = "User";
+            string Role = "User";
             if(_context.Store.Any(S => S.UserId == account.Id)){
                 Role = "Seller";
             };
@@ -219,6 +223,18 @@ namespace Recycle.Controllers
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
+        }
+
+        private string hash_passwrd(string origin_password)
+        {
+            byte[] salt = new byte[128/8];
+            salt = Encoding.ASCII.GetBytes("/-_#*+!?()=:.@");
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+            password: origin_password,
+            salt: salt,
+            prf: KeyDerivationPrf.HMACSHA256,
+            iterationCount: 100000,
+            numBytesRequested: 256 / 8));
         }
     }
 }
