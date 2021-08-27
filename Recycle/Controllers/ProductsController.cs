@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Recycle.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProductsController : Controller
     {
         // GET: /<controller>/

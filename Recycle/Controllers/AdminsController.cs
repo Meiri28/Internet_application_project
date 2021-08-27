@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminsController : Controller
     {
         private readonly RecycleContext _context;
@@ -22,7 +24,8 @@ namespace Recycle.Controllers
         // GET: Admins
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Admin.ToListAsync());
+            var recycleContext = _context.Admin.Include(a => a.User);
+            return View(await recycleContext.ToListAsync());
         }
 
         // GET: Admins/Details/5
@@ -34,6 +37,7 @@ namespace Recycle.Controllers
             }
 
             var admin = await _context.Admin
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (admin == null)
             {
@@ -46,6 +50,7 @@ namespace Recycle.Controllers
         // GET: Admins/Create
         public IActionResult Create()
         {
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
             return View();
         }
 
@@ -54,7 +59,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Password,CreatedAt,UpdatedAt")] Admin admin)
+        public async Task<IActionResult> Create([Bind("Id,CreatedAt,UpdatedAt,UserId")] Admin admin)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +67,7 @@ namespace Recycle.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", admin.UserId);
             return View(admin);
         }
 
@@ -78,6 +84,7 @@ namespace Recycle.Controllers
             {
                 return NotFound();
             }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", admin.UserId);
             return View(admin);
         }
 
@@ -86,7 +93,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Password,CreatedAt,UpdatedAt")] Admin admin)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CreatedAt,UpdatedAt,UserId")] Admin admin)
         {
             if (id != admin.Id)
             {
@@ -113,6 +120,7 @@ namespace Recycle.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", admin.UserId);
             return View(admin);
         }
 
@@ -125,6 +133,7 @@ namespace Recycle.Controllers
             }
 
             var admin = await _context.Admin
+                .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (admin == null)
             {

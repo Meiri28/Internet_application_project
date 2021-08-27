@@ -49,8 +49,8 @@ namespace Recycle.Models
 
         // Tables relationship
         public Store Store { get; set; }
-
         public List<ProductsComment> ProductsComments { get; set; }
         public List<StoreComment> StoreComments { get; set; }
+        public Admin Admin { get; set; }
     }
 }

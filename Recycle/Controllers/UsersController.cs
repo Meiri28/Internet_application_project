@@ -14,7 +14,7 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
-    [Authorize]
+    [Authorize(Roles ="Admin")]
     public class UsersController : Controller
     {
         private readonly RecycleContext _context;
@@ -50,6 +50,7 @@ namespace Recycle.Controllers
         }
 
         // GET: Users/Create
+        [AllowAnonymous]
         public IActionResult Create()
         {
             ViewBag.UserGender = new SelectList(_context.Set<UserGender>(), nameof(UserGender.Id), nameof(UserGender.Title));
@@ -61,12 +62,14 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Password,BDay")] User user, int Gender)
         {
             if (ModelState.IsValid)
             {
                 user.Gender = _context.UserGender.First(x => x.Id == Gender);
                 user.UpdatedAt = user.CreatedAt;
+                user.IsActive = true;
                 _context.Add(user);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -170,9 +173,9 @@ namespace Recycle.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> LogIn(string Email,string Password)
         {
-            var users = from u in _context.User
-                       where u.Email == Email && u.Password == Password
-                       select u;
+            var users = from user in _context.User
+                       where user.IsActive && user.Email == Email && user.Password == Password
+                       select user;
             if(users.Count() == 0)
             {
                 //username or passward is incorrect
@@ -181,10 +184,18 @@ namespace Recycle.Controllers
             }
             var account = users.First();
 
+            String Role = "User";
+            if(_context.Store.Any(S => S.UserId == account.Id)){
+                Role = "Seller";
+            };
+            if (_context.Admin.Any(S => S.UserId == account.Id)){
+                Role = "Admin";
+            };
+
             var claims = new List<Claim> {
                                             new Claim(ClaimTypes.Email, account.Email),
-                                            new Claim(ClaimTypes.Name, account.FirstName),
-                                            new Claim(ClaimTypes.Role, "User")
+                                            new Claim(ClaimTypes.Name, account.FirstName + " " + account.LastName),
+                                            new Claim(ClaimTypes.Role, Role)
             }; 
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
@@ -197,6 +208,7 @@ namespace Recycle.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
