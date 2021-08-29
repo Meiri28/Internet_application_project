@@ -188,19 +188,22 @@ namespace Recycle.Controllers
             }
             var account = users.First();
 
-            string Role = "User";
-            if(_context.Store.Any(S => S.UserId == account.Id)){
-                Role = "Seller";
-            };
-            if (_context.Admin.Any(S => S.UserId == account.Id)){
-                Role = "Admin";
-            };
-
             var claims = new List<Claim> {
                                             new Claim(ClaimTypes.Email, account.Email),
                                             new Claim(ClaimTypes.Name, account.FirstName + " " + account.LastName),
-                                            new Claim(ClaimTypes.Role, Role)
-            }; 
+            };
+            if (_context.Store.Any(S => S.UserId == account.Id))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Seller"));
+            } else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Buyer"));
+            }
+            if (_context.Admin.Any(S => S.UserId == account.Id))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            };
+
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var authProperties = new AuthenticationProperties
             {
@@ -212,12 +215,12 @@ namespace Recycle.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index),"Home");
         }
 
         private bool UserExists(int id)

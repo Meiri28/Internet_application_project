@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     public class StoresController : Controller
     {
         private readonly RecycleContext _context;
@@ -48,6 +49,31 @@ namespace Recycle.Controllers
         }
 
         // GET: Stores/Create
+        public IActionResult CreateAdmin()
+        {
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
+            return View();
+        }
+
+        // POST: Stores/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateAdmin([Bind("Id,UserId,Name,Rate,IsActive,CreatedAt,UpdatedAt")] Store store)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Add(store);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);
+            return View(store);
+        }
+
+        // GET: Stores/Create
+        [Authorize(Roles = "Buyer")]
         public IActionResult Create()
         {
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
@@ -59,12 +85,18 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,Name,Rate,IsActive,CreatedAt,UpdatedAt")] Store store)
+        [Authorize(Roles = "Buyer")]
+        public async Task<IActionResult> Create([Bind("Id,Name,CreatedAt")] Store store)
         {
+            store.Rate = 1;
+            store.IsActive = true;
+            store.UpdatedAt = store.CreatedAt;
+            store.UserId = _context.User.Where(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value).First().Id;
             if (ModelState.IsValid)
             {
                 _context.Add(store);
                 await _context.SaveChangesAsync();
+                //TODO: change buyer to seller
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);

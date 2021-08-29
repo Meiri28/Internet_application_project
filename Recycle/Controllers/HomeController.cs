@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace Recycle.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

@@ -23,7 +23,7 @@ namespace Recycle.Models
         public List<Products>  Products { get; set; }
 
         [Required]
-        [Range(1,5)]
+        //[Range(1,5)]
         public int Rate { get; set; }
 
         [Required]
