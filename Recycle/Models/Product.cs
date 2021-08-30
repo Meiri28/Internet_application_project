@@ -20,11 +20,17 @@ namespace Recycle.Models
         [Required]
         public string ItemName { get; set; }
 
-        //[Required]
+        [Required]
         public string ItemDesc { get; set; }
 
         [Required]
         public string Size { get; set; }
+
+        [Required]
+        public int Amount { get; set; }
+
+        [Required]
+        public uint Price { get; set; }
 
         [Required]
         public string Color { get; set; }

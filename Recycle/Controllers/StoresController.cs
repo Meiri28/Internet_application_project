@@ -112,6 +112,7 @@ namespace Recycle.Controllers
         }
 
         // GET: Stores/Edit/5
+        [Authorize(Roles = "Seller")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -140,6 +141,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Seller")]
         public async Task<IActionResult> Edit(int id, String Name)
         {
             if (!IsOwnerOfStore(id))
