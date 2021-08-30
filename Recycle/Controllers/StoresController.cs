@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Recycle.Data;
 using Recycle.Models;
@@ -46,6 +47,13 @@ namespace Recycle.Controllers
             }
 
             return View(store);
+        }
+
+        [Authorize(Roles = "Seller")]
+        public async Task<IActionResult> MyStore()
+        {
+            int store_id = _context.Store.Where(s=>s.UserId == _context.User.Where(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value).First().Id).First().Id;
+            return RedirectToAction(nameof(Edit), "Stores", new RouteValueDictionary( new { Id = store_id }));
         }
 
         // GET: Stores/Create
@@ -116,6 +124,13 @@ namespace Recycle.Controllers
             {
                 return NotFound();
             }
+            if (!IsOwnerOfStore(id.GetValueOrDefault(0)))
+            {
+                // TODO: return access denied
+                // try to edit other user store
+                return NotFound();
+            }
+
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);
             return View(store);
         }
@@ -125,7 +140,71 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Name,Rate,IsActive,CreatedAt,UpdatedAt")] Store store)
+        public async Task<IActionResult> Edit(int id, String Name)
+        {
+            if (!IsOwnerOfStore(id))
+            {
+                // TODO: return access denied
+                // try to edit other user store
+                return NotFound();
+            }
+
+            Store store = GetUserStore();
+            store.Name = Name;
+            store.UpdatedAt = DateTime.Now;
+
+            if (id != store.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(store);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!StoreExists(store.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);
+            return View(store);
+        }
+
+        // GET: Stores/Edit/5
+        public async Task<IActionResult> EditAdmin(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var store = await _context.Store.FindAsync(id);
+            if (store == null)
+            {
+                return NotFound();
+            }
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);
+            return View(store);
+        }
+
+        // POST: Stores/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAdmin(int id, [Bind("Id,UserId,Name,Rate,IsActive,CreatedAt,UpdatedAt")] Store store)
         {
             if (id != store.Id)
             {
@@ -189,6 +268,17 @@ namespace Recycle.Controllers
         private bool StoreExists(int id)
         {
             return _context.Store.Any(e => e.Id == id);
+        }
+
+        private bool IsOwnerOfStore(int Store_id_to_check)
+        {
+            Store store = GetUserStore();
+            return store.Id== Store_id_to_check;
+        }
+
+        private Store GetUserStore()
+        {
+            return _context.Store.Where(s => s.UserId == _context.User.Where(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value).First().Id).First();
         }
     }
 }
