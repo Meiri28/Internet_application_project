@@ -24,7 +24,7 @@ namespace Recycle.Data
 
         public DbSet<Recycle.Models.StoreComment> StoreComment { get; set; }
 
-        public DbSet<Recycle.Models.ProductsComment> ProductsComment { get; set; }
+        public DbSet<Recycle.Models.ProductComment> ProductsComment { get; set; }
 
     }
 }

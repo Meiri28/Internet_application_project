@@ -51,7 +51,7 @@ namespace Recycle.Controllers
         // GET: ProductsComments/Create
         public IActionResult Create()
         {
-            ViewData["ProductsId"] = new SelectList(_context.Set<Products>(), "Id", "Color");
+            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
             return View();
         }
@@ -61,7 +61,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductsComment productsComment)
+        public async Task<IActionResult> Create([Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductComment productsComment)
         {
             if (ModelState.IsValid)
             {
@@ -69,7 +69,7 @@ namespace Recycle.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Products>(), "Id", "Color", productsComment.ProductsId);
+            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
             return View(productsComment);
         }
@@ -87,7 +87,7 @@ namespace Recycle.Controllers
             {
                 return NotFound();
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Products>(), "Id", "Color", productsComment.ProductsId);
+            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
             return View(productsComment);
         }
@@ -97,7 +97,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductsComment productsComment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductComment productsComment)
         {
             if (id != productsComment.Id)
             {
@@ -124,7 +124,7 @@ namespace Recycle.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Products>(), "Id", "Color", productsComment.ProductsId);
+            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
             return View(productsComment);
         }

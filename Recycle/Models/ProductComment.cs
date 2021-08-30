@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Recycle.Models
 {
-    public class ProductsComment
+    public class ProductComment
     {
         [Key]
         [Required]
@@ -18,7 +18,7 @@ namespace Recycle.Models
 
         [Required]
         public int ProductsId { get; set; }
-        public Products Products { get; set; }
+        public Product Products { get; set; }
 
         [Required]
         [StringLength(500, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 1)]

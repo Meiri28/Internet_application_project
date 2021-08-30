@@ -20,7 +20,7 @@ namespace Recycle.Models
         [StringLength(100, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 1)]
         public string Name { get; set; }
 
-        public List<Products>  Products { get; set; }
+        public List<Product>  Products { get; set; }
 
         [Required]
         //[Range(1,5)]

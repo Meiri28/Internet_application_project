@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 namespace Recycle.Models
 {
-    public class Products
+    public class Product
     {
         [Key]
         [Required]
@@ -44,6 +44,6 @@ namespace Recycle.Models
 
 
         // Tables relationship
-        public List<ProductsComment> comments { get; set; }
+        public List<ProductComment> comments { get; set; }
     }
 }
