@@ -21,7 +21,9 @@ namespace Recycle.Models
 
         public int NumTransaction { get; set; }
 
-//starus(pending, approve, dicline)
+        public String starus { get; set; }
+
+        //starus(pending, approve, dicline)
 
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
