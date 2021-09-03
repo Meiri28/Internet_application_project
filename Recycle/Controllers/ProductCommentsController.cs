@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,24 +10,23 @@ using Recycle.Models;
 
 namespace Recycle.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class ProductsCommentsController : Controller
+    public class ProductCommentsController : Controller
     {
         private readonly RecycleContext _context;
 
-        public ProductsCommentsController(RecycleContext context)
+        public ProductCommentsController(RecycleContext context)
         {
             _context = context;
         }
 
-        // GET: ProductsComments
+        // GET: ProductComments
         public async Task<IActionResult> Index()
         {
-            var recycleContext = _context.ProductsComment.Include(p => p.Products).Include(p => p.Writer);
+            var recycleContext = _context.ProductsComment.Include(p => p.Product).Include(p => p.Writer);
             return View(await recycleContext.ToListAsync());
         }
 
-        // GET: ProductsComments/Details/5
+        // GET: ProductComments/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -36,45 +34,45 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var productsComment = await _context.ProductsComment
-                .Include(p => p.Products)
+            var productComment = await _context.ProductsComment
+                .Include(p => p.Product)
                 .Include(p => p.Writer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productsComment == null)
+            if (productComment == null)
             {
                 return NotFound();
             }
 
-            return View(productsComment);
+            return View(productComment);
         }
 
-        // GET: ProductsComments/Create
+        // GET: ProductComments/Create
         public IActionResult Create()
         {
-            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color");
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Color");
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email");
             return View();
         }
 
-        // POST: ProductsComments/Create
+        // POST: ProductComments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductComment productsComment)
+        public async Task<IActionResult> Create([Bind("Id,UserId,ProductId,body,CreatedAt,UpdatedAt")] ProductComment productComment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(productsComment);
+                _context.Add(productComment);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
-            return View(productsComment);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Color", productComment.ProductId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productComment.UserId);
+            return View(productComment);
         }
 
-        // GET: ProductsComments/Edit/5
+        // GET: ProductComments/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -82,24 +80,24 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var productsComment = await _context.ProductsComment.FindAsync(id);
-            if (productsComment == null)
+            var productComment = await _context.ProductsComment.FindAsync(id);
+            if (productComment == null)
             {
                 return NotFound();
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
-            return View(productsComment);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Color", productComment.ProductId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productComment.UserId);
+            return View(productComment);
         }
 
-        // POST: ProductsComments/Edit/5
+        // POST: ProductComments/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProductsId,body,CreatedAt,UpdatedAt")] ProductComment productsComment)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,ProductId,body,CreatedAt,UpdatedAt")] ProductComment productComment)
         {
-            if (id != productsComment.Id)
+            if (id != productComment.Id)
             {
                 return NotFound();
             }
@@ -108,12 +106,12 @@ namespace Recycle.Controllers
             {
                 try
                 {
-                    _context.Update(productsComment);
+                    _context.Update(productComment);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductsCommentExists(productsComment.Id))
+                    if (!ProductCommentExists(productComment.Id))
                     {
                         return NotFound();
                     }
@@ -124,12 +122,12 @@ namespace Recycle.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductsId"] = new SelectList(_context.Set<Product>(), "Id", "Color", productsComment.ProductsId);
-            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productsComment.UserId);
-            return View(productsComment);
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "Color", productComment.ProductId);
+            ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", productComment.UserId);
+            return View(productComment);
         }
 
-        // GET: ProductsComments/Delete/5
+        // GET: ProductComments/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -137,30 +135,30 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var productsComment = await _context.ProductsComment
-                .Include(p => p.Products)
+            var productComment = await _context.ProductsComment
+                .Include(p => p.Product)
                 .Include(p => p.Writer)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (productsComment == null)
+            if (productComment == null)
             {
                 return NotFound();
             }
 
-            return View(productsComment);
+            return View(productComment);
         }
 
-        // POST: ProductsComments/Delete/5
+        // POST: ProductComments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var productsComment = await _context.ProductsComment.FindAsync(id);
-            _context.ProductsComment.Remove(productsComment);
+            var productComment = await _context.ProductsComment.FindAsync(id);
+            _context.ProductsComment.Remove(productComment);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductsCommentExists(int id)
+        private bool ProductCommentExists(int id)
         {
             return _context.ProductsComment.Any(e => e.Id == id);
         }

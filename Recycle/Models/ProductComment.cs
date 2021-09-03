@@ -17,8 +17,8 @@ namespace Recycle.Models
         public User Writer { get; set; }
 
         [Required]
-        public int ProductsId { get; set; }
-        public Product Products { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
 
         [Required]
         [StringLength(500, ErrorMessage = "{0} length must be between {2} and {1}.", MinimumLength = 1)]

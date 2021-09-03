@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Recycle.Models.ProductsComment>
+﻿@model IEnumerable<Recycle.Models.ProductComment>
 
 @{
     ViewData["Title"] = "Index";
@@ -16,7 +16,7 @@
                 @Html.DisplayNameFor(model => model.Writer)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Products)
+                @Html.DisplayNameFor(model => model.Product)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.body)
@@ -37,7 +37,7 @@
                 @Html.DisplayFor(modelItem => item.Writer.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Products.Color)
+                @Html.DisplayFor(modelItem => item.Product.Color)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.body)

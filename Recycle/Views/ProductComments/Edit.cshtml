@@ -1,4 +1,4 @@
-﻿@model Recycle.Models.ProductsComment
+﻿@model Recycle.Models.ProductComment
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,7 +6,7 @@
 
 <h1>Edit</h1>
 
-<h4>ProductsComment</h4>
+<h4>ProductComment</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -19,9 +19,9 @@
                 <span asp-validation-for="UserId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductsId" class="control-label"></label>
-                <select asp-for="ProductsId" class="form-control" asp-items="ViewBag.ProductsId"></select>
-                <span asp-validation-for="ProductsId" class="text-danger"></span>
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="body" class="control-label"></label>
