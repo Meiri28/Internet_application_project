@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,7 +26,7 @@ namespace Recycle.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var recycleContext = _context.Product.Include(p => p.Store);
+            var recycleContext = _context.Product.Include(p => p.Store).Include(p => p.Pictures);
             return View(await recycleContext.ToListAsync());
         }
 
@@ -84,13 +86,24 @@ namespace Recycle.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Seller")]
-        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,Pictures,VideoURL")] Product product)
+        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,PictursFiles,VideoURL")] Product product)
         {
             product.UpdatedAt = product.CreatedAt;
             product.IsActive = true;
             product.StoreId = _context.Store.Where(s => s.UserId == _context.User.Where(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value).First().Id).First().Id;
             if (ModelState.IsValid)
             {
+                product.Pictures = new List<ProductImage>();
+                foreach (IFormFile image in product.PictursFiles){
+                    using( MemoryStream ms= new MemoryStream())
+                    {
+                        image.CopyTo(ms);
+                        ProductImage p = new ProductImage();
+                        p.Product = product;
+                        p.Data = ms.ToArray();
+                        product.Pictures.Add(p);
+                    }
+                }
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

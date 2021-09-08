@@ -1,7 +1,9 @@
 ﻿using DataAnnotationsExtensions;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 namespace Recycle.Models
@@ -27,16 +29,13 @@ namespace Recycle.Models
         public string Size { get; set; }
 
         [Required]
-        public int Amount { get; set; }
+        public uint Amount { get; set; }
 
         [Required]
         public uint Price { get; set; }
 
         [Required]
         public string Color { get; set; }
-
-        [Required]
-        public string Pictures { get; set; }
 
         public string VideoURL { get; set; }
 
@@ -51,5 +50,10 @@ namespace Recycle.Models
 
         // Tables relationship
         public List<ProductComment> comments { get; set; }
+
+        public List<ProductImage> Pictures { get; set; }
+
+        [NotMapped]
+        public List<IFormFile> PictursFiles { get; set; }
     }
 }
