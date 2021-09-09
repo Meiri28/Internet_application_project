@@ -86,7 +86,7 @@ namespace Recycle.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Seller")]
-        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,PictursFiles,VideoURL")] Product product)
+        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,PictursFiles,VideoFile")] Product product)
         {
             product.UpdatedAt = product.CreatedAt;
             product.IsActive = true;
@@ -94,16 +94,24 @@ namespace Recycle.Controllers
             if (ModelState.IsValid)
             {
                 product.Pictures = new List<ProductImage>();
-                foreach (IFormFile image in product.PictursFiles){
-                    using( MemoryStream ms= new MemoryStream())
-                    {
-                        image.CopyTo(ms);
-                        ProductImage p = new ProductImage();
-                        p.Product = product;
-                        p.Data = ms.ToArray();
-                        product.Pictures.Add(p);
+                if(product.PictursFiles != null) { 
+                    foreach (IFormFile image in product.PictursFiles){
+                        using( MemoryStream ms= new MemoryStream())
+                        {
+                            image.CopyTo(ms);
+                            ProductImage p = new ProductImage();
+                            p.Product = product;
+                            p.Data = ms.ToArray();
+                            product.Pictures.Add(p);
+                        }
                     }
                 }
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    product.VideoFile.CopyTo(ms);
+                    product.Video = ms.ToArray();
+                }
+                
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

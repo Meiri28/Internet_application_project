@@ -37,7 +37,10 @@ namespace Recycle.Models
         [Required]
         public string Color { get; set; }
 
-        public string VideoURL { get; set; }
+        public byte[] Video { get; set; }
+
+        [NotMapped]
+        public IFormFile VideoFile { get; set; }
 
         [Required]
         [Display(Name = "Is Product Active?")]

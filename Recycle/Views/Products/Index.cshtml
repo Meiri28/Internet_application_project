@@ -37,7 +37,7 @@
                 @Html.DisplayNameFor(model => model.Pictures)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.VideoURL)
+                @Html.DisplayNameFor(model => model.Video)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsActive)
@@ -89,7 +89,14 @@
                 }
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.VideoURL)
+                @if (item.Video != null)
+                {
+                    <video src="data:video/mp4;base64,@Convert.ToBase64String(item.Video)" controls/>
+                }
+                else
+                {
+                    <p>No video</p>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsActive)
