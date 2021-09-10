@@ -52,5 +52,11 @@ namespace Recycle.Models
         public List<ProductComment> ProductsComments { get; set; }
         public List<StoreComment> StoreComments { get; set; }
         public Admin Admin { get; set; }
+
+        [NotMapped]
+        public List<Transaction> TranstionFromThisUser { get; set; }
+
+        [NotMapped]
+        public List<Transaction> TranstionToThisUser { get; set; }
     }
 }

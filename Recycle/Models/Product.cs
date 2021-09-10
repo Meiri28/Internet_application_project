@@ -58,5 +58,7 @@ namespace Recycle.Models
 
         [NotMapped]
         public List<IFormFile> PictursFiles { get; set; }
+
+        public List<Transaction> Transactions { get; set; }
     }
 }

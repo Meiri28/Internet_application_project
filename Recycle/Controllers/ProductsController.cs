@@ -96,7 +96,8 @@ namespace Recycle.Controllers
                 product.Pictures = new List<ProductImage>();
                 if(product.PictursFiles != null) { 
                     foreach (IFormFile image in product.PictursFiles){
-                        using( MemoryStream ms= new MemoryStream())
+                        //store the image
+                        using ( MemoryStream ms= new MemoryStream())
                         {
                             image.CopyTo(ms);
                             ProductImage p = new ProductImage();
@@ -106,12 +107,16 @@ namespace Recycle.Controllers
                         }
                     }
                 }
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    product.VideoFile.CopyTo(ms);
-                    product.Video = ms.ToArray();
+                if(product.VideoFile != null)
+                { 
+                    //store the video
+                    using (MemoryStream ms = new MemoryStream())
+                    {
+                        product.VideoFile.CopyTo(ms);
+                        product.Video = ms.ToArray();
+                    }
                 }
-                
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
