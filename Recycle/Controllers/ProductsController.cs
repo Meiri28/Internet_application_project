@@ -207,7 +207,6 @@ namespace Recycle.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-
         private bool ProductExists(int id)
         {
             return _context.Product.Any(e => e.Id == id);

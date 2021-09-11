@@ -28,5 +28,7 @@ namespace Recycle.Data
 
         public DbSet<Recycle.Models.Product> Product { get; set; }
 
+        public DbSet<Recycle.Models.Transaction> Transaction { get; set; }
+
     }
 }
