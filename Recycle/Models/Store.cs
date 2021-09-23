@@ -35,5 +35,9 @@ namespace Recycle.Models
 
         // Tables relationship
         public List<StoreComment> comments { get; set; }
+
+        // Google Maps data
+        public string Latitude { get; set; } //x
+        public string Longitude { get; set; } //y
     }
 }
