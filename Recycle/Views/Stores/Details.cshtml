@@ -10,44 +10,91 @@
     <h4>Store</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Owner)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Owner.Email)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Rate)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Rate)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.IsActive)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.IsActive)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Latitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Latitude)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Longitude)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Longitude)
+        </dd>
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.CreatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.UpdatedAt)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedAt)
         </dd>
     </dl>
 </div>
+
+
+<div id="dvMap" style="width: 500px; height: 500px">
+</div>
+
+@*https://www.maps.ie/coordinates.html*@
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsmw9yRarqz11iapQD7ryZgFObIVNjr8I"></script>
+<script type="text/javascript">
+
+        window.onload = function () {
+            var mapOptions = {
+                center: new google.maps.LatLng(@Html.DisplayFor(model => model.Latitude), @Html.DisplayFor(model => model.Longitude) ),
+                zoom: 8,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+
+                var myLatlng = new google.maps.LatLng(@Html.DisplayFor(model => model.Latitude), @Html.DisplayNameFor(model => model.Latitude));
+                var marker = new google.maps.Marker({
+                    position: myLatlng,
+                    map: map,
+                    title: "@Html.DisplayFor(model => model.Name)"
+                });
+                (function (marker) {
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent("@Html.DisplayFor(model => model.Name)");
+                        infoWindow.open(map, marker);
+                    });
+                })(marker);
+
+        }
+</script>
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recycle.Data;
 
 namespace Recycle.Migrations
 {
     [DbContext(typeof(RecycleContext))]
-    partial class RecycleContextModelSnapshot : ModelSnapshot
+    [Migration("20210923082458_AddGoogleMapsToStore")]
+    partial class AddGoogleMapsToStore
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("HashtagProduct", b =>
-                {
-                    b.Property<string>("HashtagsTitle")
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("HashtagsTitle", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("HashtagProduct");
-                });
 
             modelBuilder.Entity("Recycle.Models.Admin", b =>
                 {
@@ -56,17 +43,6 @@ namespace Recycle.Migrations
                         .IsUnique();
 
                     b.ToTable("Admin");
-                });
-
-            modelBuilder.Entity("Recycle.Models.Hashtag", b =>
-                {
-                    b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Title");
-
-                    b.ToTable("Hashtag");
                 });
 
             modelBuilder.Entity("Recycle.Models.Product", b =>
@@ -349,21 +325,6 @@ namespace Recycle.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("UserGender");
-                });
-
-            modelBuilder.Entity("HashtagProduct", b =>
-                {
-                    b.HasOne("Recycle.Models.Hashtag", null)
-                        .WithMany()
-                        .HasForeignKey("HashtagsTitle")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Recycle.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Recycle.Models.Admin", b =>
