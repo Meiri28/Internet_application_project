@@ -10,7 +10,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddProduct" enctype="multipart/form-data">
+        <form id="addProduct" asp-action="AddProduct" enctype="multipart/form-data">
             <div class="form-group">
                 <label asp-for="ItemName" class="control-label"></label>
                 <input asp-for="ItemName" class="form-control" />
@@ -51,6 +51,13 @@
                 <input asp-for="VideoFile" class="form-control" accept="video/mp4"/>
                 <span asp-validation-for="Video" class="text-danger"></span>
             </div>
+
+            <lable for="hashtaginput"class="form-group"  id="hashtagsList">
+            </lable>
+            <input type="text" value="" name="hashtaginput" data-role="tagsinput" id="hashtaginput" class="form-control" >
+            <span id="hashtaginputError" class="text-danger"></span>
+
+
             <div class="form-group">
                 <input type="submit" value="Add product" class="btn btn-primary" />
             </div>
@@ -64,4 +71,45 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+        $("#hashtaginput").keypress(function (e) {
+            //13 is enter
+            // 9 for tab
+            let hashtag = $("#hashtaginput").val()
+
+            if (e.which == 13 && hashtag.length > 0) {
+                event.preventDefault();
+                if (hashtag.indexOf(',') != -1) {
+                    $('#hashtaginputError').text("',' is not allow in hashtag!")
+                    return
+                }
+
+                let is_already_added = false
+                $("#hashtagsList").children().each(function (i){
+                    if ($(this).text() == hashtag) 
+                        is_already_added = true
+                })
+                
+                if (is_already_added){
+                    $('#hashtaginputError').text(hashtag + " already added")
+                    return
+                }
+                    
+                $("#hashtagsList").append('<span class="badge bg-primary" onclick="$(this).remove()">' + hashtag  + '</span>')
+                $("#hashtaginput").val("")
+                $('#hashtaginputError').text("")
+            }
+        })
+
+        $('#addProduct').submit(() => {
+            let hashtagList = []
+            $('#hashtagsList').children().each(function (i) {
+                hashtagList.push($(this).text())
+            });
+
+            $('#hashtaginput').val(hashtagList);
+        })
+
+    </script>
 }

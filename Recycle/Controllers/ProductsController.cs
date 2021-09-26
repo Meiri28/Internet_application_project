@@ -86,7 +86,7 @@ namespace Recycle.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Seller")]
-        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,PictursFiles,VideoFile")] Product product)
+        public async Task<IActionResult> AddProduct([Bind("Id,ItemName,ItemDesc,Size,Amount,Price,Color,PictursFiles,VideoFile")] Product product, String hashtaginput)
         {
             product.UpdatedAt = product.CreatedAt;
             product.IsActive = true;
