@@ -117,6 +117,19 @@ namespace Recycle.Controllers
                     }
                 }
 
+                product.Hashtags = new List<Hashtag>();
+                foreach (String hashtagTital in hashtaginput.Split(','))
+                {
+                    Hashtag hashtag = _context.Hashtag.Find(hashtagTital);
+                    if (hashtag == null)
+                    {
+                        hashtag = new Hashtag();
+                        hashtag.Title = hashtagTital;
+                    }
+                    
+                    product.Hashtags.Add(hashtag);
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
