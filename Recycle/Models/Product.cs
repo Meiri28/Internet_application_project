@@ -60,5 +60,7 @@ namespace Recycle.Models
         public List<IFormFile> PictursFiles { get; set; }
 
         public List<Transaction> Transactions { get; set; }
+
+        public List<Hashtag> Hashtags { get; set; }
     }
 }
