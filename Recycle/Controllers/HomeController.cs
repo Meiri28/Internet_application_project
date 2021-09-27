@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Recycle.Data;
+using Recycle.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Recycle.Controllers
 {
@@ -14,14 +17,24 @@ namespace Recycle.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        private readonly RecycleContext _context;
+
+        public HomeController(ILogger<HomeController> logger, RecycleContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var hashtags = _context.Hashtag.Include(h => h.Products);
+            await hashtags.ForEachAsync(h => h.Products.ForEach(p =>
+            {
+                p.Pictures = new List<ProductImage>();
+                p.Pictures.Add(_context.ProductImage.FirstOrDefault(image => image.ProductId == p.Id));
+            }));
+         
+            return View(await hashtags.ToListAsync());
         }
 
         public IActionResult Privacy()

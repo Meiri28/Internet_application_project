@@ -28,6 +28,8 @@ namespace Recycle.Data
 
         public DbSet<Recycle.Models.Product> Product { get; set; }
 
+        public DbSet<Recycle.Models.ProductImage> ProductImage { get; set; }
+
         public DbSet<Recycle.Models.Transaction> Transaction { get; set; }
 
         public DbSet<Recycle.Models.Hashtag> Hashtag { get; set; }
