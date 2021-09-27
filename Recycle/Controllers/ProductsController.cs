@@ -146,7 +146,7 @@ namespace Recycle.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Product.Include(P => P.Hashtags).FirstAsync(product => product.Id == (int)id);
             if (product == null)
             {
                 return NotFound();
@@ -160,7 +160,7 @@ namespace Recycle.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StoreId,ItemName,ItemDesc,Size,Amount,Price,Color,Pictures,VideoURL,IsActive,CreatedAt,UpdatedAt")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StoreId,ItemName,ItemDesc,Size,Amount,Price,Color,Pictures,VideoURL,IsActive")] Product product)
         {
             if (id != product.Id)
             {
@@ -171,6 +171,7 @@ namespace Recycle.Controllers
             {
                 try
                 {
+                    product.UpdatedAt = DateTime.Now;
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
