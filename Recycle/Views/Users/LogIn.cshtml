@@ -10,6 +10,10 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
+        @if (ViewData.ContainsKey("error_code"))
+        {
+            <p class="text-danger">@ViewData["error_code"] </p>
+        }
         <form asp-action="LogIn">
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
