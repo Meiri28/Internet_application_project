@@ -67,7 +67,7 @@ namespace Recycle.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Password,BDay")] User user, int Gender)
         {
-            if(_context.User.First(u => u.Email == user.Email) != null)
+            if(_context.User.Where(u => u.Email == user.Email).Count() > 0)
             {
                 ViewData["error_code"] = "This Email is already registerd";
                 return View(user);
