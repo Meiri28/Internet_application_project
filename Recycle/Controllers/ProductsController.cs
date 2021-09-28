@@ -39,8 +39,9 @@ namespace Recycle.Controllers
             }
 
             var product = await _context.Product
-                .Include(p => p.Store)
+                .Include(p => p.Hashtags).Include(p=> p.Pictures)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (product == null)
             {
                 return NotFound();
