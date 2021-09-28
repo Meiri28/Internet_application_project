@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -104,7 +106,35 @@ namespace Recycle.Controllers
             {
                 _context.Add(store);
                 await _context.SaveChangesAsync();
-                //TODO: change buyer to seller
+
+                User account = _context.User.First(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value);
+                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                var claims = new List<Claim> {
+                                            new Claim(ClaimTypes.Email, account.Email),
+                                            new Claim(ClaimTypes.Name, account.FirstName + " " + account.LastName),
+            };
+                if (_context.Store.Any(S => S.UserId == account.Id))
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Seller"));
+                }
+                else
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Buyer"));
+                }
+                if (_context.Admin.Any(S => S.UserId == account.Id))
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+                };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+                };
+                HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                              new ClaimsPrincipal(claimsIdentity), authProperties);
+
                 return RedirectToAction(nameof(Index));
             }
             ViewData["UserId"] = new SelectList(_context.User, "Id", "Email", store.UserId);

@@ -77,13 +77,13 @@ namespace Recycle.Controllers
             User buyer = _context.User.Where(u => u.Email == HttpContext.User.FindFirst(ClaimTypes.Email).Value).First();
             if (Amount * product.Price > buyer.Balance)
             {
-                //TODO: dont have meony
-                return RedirectToAction(nameof(Index));
+                ViewData["error_code"] = "You don't have enough balane in your accunt, the price for " + Amount + " items is " + Amount * product.Price;
+                return View();
             }
             if (product.Amount < Amount)
             {
-                //TODO: dont have products
-                return RedirectToAction(nameof(Index));
+                ViewData["error_code"] = "not enough items in stock";
+                return View();
             }
             if(linq.First().seller.Id == buyer.Id)
             {

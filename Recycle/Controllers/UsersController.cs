@@ -192,7 +192,7 @@ namespace Recycle.Controllers
                         select user;
             if(users.Count() == 0)
             {
-                //username or passward is incorrect
+                ViewData["error_code"] = "username or passward is incorrect"; 
                 return View();
 
             }
