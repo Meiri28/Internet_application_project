@@ -4,11 +4,14 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Register</h1>
 
-<h4>User</h4>
 <hr />
 <div class="row">
+    @if (ViewData.ContainsKey("error_code"))
+    { 
+        <p class="text-danger">@ViewData["error_code"] </p>
+    }
     <div class="col-md-4">
         <div>
             Already have accunt? <a asp-action="Log In">Log In</a>

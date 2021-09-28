@@ -67,6 +67,16 @@ namespace Recycle.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,Password,BDay")] User user, int Gender)
         {
+            if(_context.User.First(u => u.Email == user.Email) != null)
+            {
+                ViewData["error_code"] = "This Email is already registerd";
+                return View(user);
+            }
+            if(user.BDay > DateTime.Now)
+            {
+                ViewData["error_code"] = "users must be born to register this site";
+                return View(user);
+            }
             if (ModelState.IsValid)
             {
                 user.Gender = _context.UserGender.First(x => x.Id == Gender);
