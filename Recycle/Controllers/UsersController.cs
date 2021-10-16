@@ -233,6 +233,49 @@ namespace Recycle.Controllers
             return RedirectToAction(nameof(Index),"Home");
         }
 
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ConnectAs(int? id)
+        {
+            if(id == null)
+                return View(await _context.User.ToListAsync());
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            User account = _context.User.First(u => u.Id == id);
+            if (account == null)
+            {
+                ViewData["error_code"] = "User not found";
+                return View();
+            }
+
+            var claims = new List<Claim> {
+                                            new Claim(ClaimTypes.Email, account.Email),
+                                            new Claim(ClaimTypes.Name, account.FirstName + " " + account.LastName),
+            };
+            if (_context.Store.Any(S => S.UserId == account.Id))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Seller"));
+            }
+            else
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Buyer"));
+            }
+            if (_context.Admin.Any(S => S.UserId == account.Id))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "Admin"));
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(10)
+            };
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                                          new ClaimsPrincipal(claimsIdentity), authProperties);
+
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
         private bool UserExists(int id)
         {
             return _context.User.Any(e => e.Id == id);
