@@ -18,16 +18,53 @@
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
+            <div id="dvMap" style="width: 500px; height: 500px"></div>
+            <br/>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-success" asp-controller="Products" asp-action="AddProduct" role="button">Add Products</a>
             </div>
-            <a asp-controller="Products" asp-action="AddProduct">click here to add products to your store</a>
         </form>
     </div>
 </div>
 
+@*
+    Get store condination
+    https://www.maps.ie/coordinates.html
+*@
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsmw9yRarqz11iapQD7ryZgFObIVNjr8I"></script>
+<script type="text/javascript">
+    var map;
+    function initialize() {
+        var latlng = new google.maps.LatLng(@Html.DisplayFor(model => model.Latitude), @Html.DisplayFor(model => model.Longitude));
+        var mapOptions = {
+            zoom: 8,
+            center: latlng,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        map = new google.maps.Map(document.getElementById("dvMap"), mapOptions);
+        var marker = new google.maps.Marker
+            (
+                {
+                    position: new google.maps.LatLng(@Html.DisplayFor(model => model.Latitude), @Html.DisplayFor(model => model.Longitude)),
+                    map: map,
+                    title: 'Click me'
+                }
+            );
+        var infowindow = new google.maps.InfoWindow({
+            content: 'Store Info : @Html.DisplayFor(model => model.Name) <br/> Latitude : @Html.DisplayFor(model => model.Latitude) <br/>Longitude : @Html.DisplayFor(model => model.Longitude)'
+        });
+        google.maps.event.addListener(marker, 'click', function () {
+            // Calling the open method of the infoWindow
+            infowindow.open(map, marker);
+        });
+    }
+    window.onload = initialize;
+</script>
+
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-action="Index" role="button"> < Back to List</a>
 </div>
 
 @section Scripts {
