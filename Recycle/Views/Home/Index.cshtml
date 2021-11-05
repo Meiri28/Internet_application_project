@@ -1,42 +1,246 @@
-﻿@model IEnumerable<Recycle.Models.Hashtag>
+﻿
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Recycle.App_Custom.Services.ClientTheme.ClientThemeService ClientTheme
 
-@{
-    ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome To RECYCLE</h1>
-</div>
-
-<div>
-    @foreach (var hashtag in Model)
-    {
-        <h2>@hashtag.Title </h2>
-        <div class="row row-cols-1 row-cols-md-3 g-4">  
-            @for (int i=0;i<3 && i<hashtag.Products.Count(); i++)
-            {
-                Product p = hashtag.Products[i];
-                <div class="col">
-                    <div class="card">
-                        @if (p.Pictures != null && p.Pictures.First() != null)
-                        {
-                            <img class="card-img-top" src="data:image/png;base64,@Convert.ToBase64String(p.Pictures.First().Data)" alt="Card image cap">
-                        } else
-                        {
-                            <img class="card-img-top" src="~/images/Recycle.jpg" alt="Card image cap">
-                        }
-                        <div class="card-body">
-                            <h5 class="card-title">@p.ItemName</h5>
-                            <p class="card-text">@p.ItemDesc</p>
-                            <a class="btn btn-primary" asp-action="Details" asp-controller="Products" asp-route-id="@p.Id">MORE DETAILS</a>
-                            <a class="btn btn-primary" asp-action="Create" asp-controller="Transactions" asp-route-id="@p.Id">BUY NOW</a>
+<section id="banner-sec">
+    <div class="sec-container">
+        <div id="banner-carousel" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                <li data-target="#banner-carousel" data-slide-to="0" class="active"></li>
+                <li data-target="#banner-carousel" data-slide-to="1"></li>
+                <li data-target="#banner-carousel" data-slide-to="2"></li>
+            </ol>
+            <div class="carousel-inner h-100">
+                <div class="carousel-item h-100 active">
+                    <div class="single-carousel-item">
+                        <div class="banner-caption">
+                            <h4>New In Stores</h4>
+                            <h2>Platinum Hazel Ring</h2>
+                            <p>This elegant wedding ring achieves a chic and distinctive look with knife-edge detailing.</p>
+                            <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-name="Platinum Hazel Ring" class="btn btn-lg btn-long-arrow">Shop Now<span class="icon icon-arrow-right3" aria-hidden="true"></span></a>
                         </div>
-                        <div class="card-footer">
-                            <small class="text-muted">@p.Price</small>
+                        <div class="banner-video">
+                            <video autoplay loop muted>
+                                <source src="~/images/banner_vid_1.mp4" type="video/mp4">
+                            </video>
                         </div>
                     </div>
                 </div>
-            }
+                <div class="carousel-item h-100">
+                    <div class="single-carousel-item">
+                        <div class="banner-caption">
+                            <h4>New Collection</h4>
+                            <h2>Beautiful Watches</h2>
+                            <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Women" asp-route-type="Watches" class="btn btn-lg btn-long-arrow mr-3">For Women<span class="icon icon-arrow-right3" aria-hidden="true"></span></a>
+                            <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Men" asp-route-type="Watches" class="btn btn-lg btn-long-arrow">For Men<span class="icon icon-arrow-right3" aria-hidden="true"></span></a>
+                        </div>
+                        <div class="banner-video">
+                            <video autoplay loop muted>
+                                <source src="~/images/banner_vid_2.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item h-100">
+                    <div class="single-carousel-item">
+                        <div class="banner-caption">
+                            <h4>On Sale</h4>
+                            <h2>Round Sapphire Ring</h2>
+                            <p>7mm Super Premium Blue Round Sapphire</p>
+                            <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-name="Round Sapphire Ring" class="btn btn-lg btn-long-arrow">Shop Now<span class="icon icon-arrow-right3" aria-hidden="true"></span></a>
+                        </div>
+                        <div class="banner-video">
+                            <video autoplay loop muted>
+                                <source src="~/images/banner_vid_3.mp4" type="video/mp4">
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#banner-carousel" role="button" data-slide="prev">
+                <span class="icon icon-arrow-left15" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#banner-carousel" role="button" data-slide="next">
+                <span class="icon icon-arrow-right16" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
         </div>
-    }
-</div>
+    </div>
+</section>
+
+<hr class="sec-separator" />
+
+<section id="about-sec">
+    <div class="sec-container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <a asp-area="" asp-controller="Home" asp-action="About" class="about-image-wrap mb-3 mb-lg-0"><img src="~/images/about-team-photo.png" alt="Team Photo" /></a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="about-content-wrap">
+                    <h2 class="txt-accent">About Us</h2>
+                    <h3>We Are Recycle!</h3>
+                    <div class="about-text">
+                        <p>TEXT TEXT TEXT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<hr class="sec-separator" />
+
+<section id="categories-sec">
+    <div class="sec-container">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="large-size-cat">
+                    <div class="row">
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Women">
+                                    <img src="~/images/category-women.jpg" alt="Women Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Women">Women</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Men">
+                                    <img src="~/images/category-men.jpg" alt="Men Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Men">Men</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="small-size-cat">
+                    <div class="row">
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Kids">
+                                    <img src="~/images/category-kids.jpg" alt="Kids Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="Kids">Kids</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Rings">
+                                    <img src="~/images/category-rings.jpg" alt="Rings Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Rings">Rings</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Watches">
+                                    <img src="~/images/category-watches.jpg" alt="Watches Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Watches">Watches</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                        <div class="col-sm-6 single-cat-item">
+                            <figure>
+                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Glasses">
+                                    <img src="~/images/category-glasses.jpg" alt="Glasses Category" />
+                                </a>
+                                <figcaption>
+                                    <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-type="Glasses">Glasses</a>
+                                </figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="testimonial-sec">
+    <div class="sec-container bg-invert">
+        <div class="row">
+            <div class="sec-title col-lg-12 text-center">
+                <h2 class="txt-title-invert">What People Say</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-9 col-centered text-center">
+                <div id="testimonial-carousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner col-lg-8 col-centered">
+                        <div class="carousel-item active">
+                            <div class="single-testimonial-item">
+                                <p>"<span>I have searched for a long time for the great ring (the precious one), and now after so much wars I have finally found it in Jewellis! My precious!</span>"</p>
+                                <h3 class="client-name">- <span>Gollum</span> -</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="single-testimonial-item">
+                                <p>"<span>I've collected so many rings and I just can't seem to have enough, after purchsing the Jewellis gold ring I finally feel whole.</span>"</p>
+                                <h3 class="client-name">- <span>Sonic</span> -</h3>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <div class="single-testimonial-item">
+                                <p>"<span>I've searched all over the galaxy for the perfect stones, and even sacrificed the things I love the most for them. The best one, I found in Recycle.</span>"</p>
+                                <h3 class="client-name">- <span>Thanos</span> -</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="carousel-control-prev" href="#testimonial-carousel" role="button" data-slide="prev">
+                        <span class="icon icon-arrow-left15 h1" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#testimonial-carousel" role="button" data-slide="next">
+                        <span class="icon icon-arrow-right16 h1" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="stay-up-to-date-sec">
+    <div class="sec-container">
+        <div class="sec-title col-lg-12 text-center">
+            <h2>Stay Up To Date</h2>
+        </div>
+        <div class="container p-lg-5">
+            <div class="row">
+                <div class="col-lg-6 pr-lg-5 mb-5 mb-lg-0">
+                    <div class="d-flex align-items-center border-primary px-5 py-4">
+                      Meta API
+                    </div>
+                </div>
+                <div class="col-lg-6 pl-lg-5 mt-4 mb-5 my-lg-0">
+                    <div class="h-100 d-flex justify-content-center align-items-center border-primary px-3 py-5">
+                        <div id="newsletter-sec">
+                            <div class="sec-title text-center">
+                                <h3>Join The Newsletter</h3>
+                                <p>Get Updates On Awesome Jewelry!</p>
+                            </div>
+                            <partial name="~/Views/Home/_NewsletterSubscriptionPartial.cshtml" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
