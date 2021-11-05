@@ -1,0 +1,117 @@
+﻿@model Recycle.Areas.Admin.ViewModels.DeliveryMethods.IndexVM
+
+@{
+    ViewData["Title"] = "Delivery Methods";
+
+    List<DeliveryMethod> deliveryMethods = (ViewData["DeliveryMethodsModel"] as List<DeliveryMethod>);
+    Pagination pagination = (ViewData["Pagination"] as Pagination);
+}
+
+<section class="bg-light-2">
+    <div class="sec-container">
+        <div class="maxw-2xl m-auto">
+            <ul class="breadcrumb p-0 mb-5">
+                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="primary-link"><u>Admin</u></a></li>
+                <li class="breadcrumb-item">Delivery Methods</li>
+            </ul>
+            <h1 class="title-1 font-weight-bold mb-5">Delivery Methods</h1>
+            <div class="form-container bg-white mb-5">
+                <form asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Index" method="get">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                        <div class="flex-fill maxw-sm mb-5 mr-sm-5">
+                            <div class="i-txt-with-btn-wrapper">
+                                <input asp-for="Query" class="i-txt bg-input-txt" autocomplete="off" />
+                                <button type="submit" class="btn outline-primary mob-icon"><span class="mob-icon-text">Search</span><span class="icon icon-search2 icon-top-adjust" aria-hidden="true"></span></button>
+                            </div>
+                        </div>
+                        <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Create" class="btn btn-primary mb-5">Create New<span class="icon icon-plus icon-top-adjust ml-3" aria-hidden="true"></span></a>
+                    </div>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center mb-3">
+                        <div class="py-3 mr-5">Showing <strong>@pagination.GetFirstRecordIndexInPage()-@pagination.GetLastRecordIndexInPage()</strong> of <strong>@pagination.TotalRecords</strong> records</div>
+                        <div class="py-3">
+                            <span>Show:</span>
+                            <select asp-for="PageSize" data-on-change-submit class="form-select txt-title bg-input-txt rounded" aria-label="Select number of records to show in a page.">
+                                <option value="10" selected>10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+                <div class="border mb-4">
+                    <div class="table-header text-center">
+                        <div class="d-flex">
+                            <div class="row flex-fill">
+                                <div class="col-md-7">Delivery Method</div>
+                                <div class="col-md-5 d-none d-md-block">Price</div>
+                            </div>
+                            <div class="table-actions d-none d-lg-block">Actions</div>
+                        </div>
+                    </div>
+                    <div class="table-body">
+                        @foreach (DeliveryMethod deliveryMethod in deliveryMethods)
+                        {
+                            <div class="table-row hover-bg px-4 py-5">
+                                <div class="d-flex flex-column flex-lg-row justify-content-end align-items-center">
+                                    <div class="row flex-fill d-flex align-items-center w-100 w-lg-auto px-lg-5 mb-4 mb-lg-0">
+                                        <div class="col-md-7 text-center text-md-left">
+                                            <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Details" asp-route-id="@deliveryMethod.Id" class="primary-link font-weight-bold text-ellipsis d-inline-block">@deliveryMethod.Name</a>
+                                            <p class="text-ellipsis m-0">@deliveryMethod.Description</p>
+                                        </div>
+                                        <div class="col-md-5 text-center">
+                                            <div class="py-3">@Html.DisplayFor(m => deliveryMethod.Price)</div>
+                                        </div>
+                                    </div>
+                                    <div class="w-100 w-md-auto text-center text-lg-right px-3">
+                                        <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Details" asp-route-id="@deliveryMethod.Id" class="btn btn-sm txt-md outline-info m-1">Details</a>
+                                        <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Edit" asp-route-id="@deliveryMethod.Id" class="btn btn-sm txt-md outline-warning m-1">Edit</a>
+                                        <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Delete" asp-route-id="@deliveryMethod.Id" class="btn btn-sm txt-md outline-danger m-1">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (deliveryMethods.Count < 1)
+                        {
+                            <p class="text-center txt-secondary p-5">No Results.</p>
+                        }
+                    </div>
+                </div>
+                @if (pagination.HasPagination())
+                {
+                    <nav class="d-flex justify-content-center mt-5 mb-4" aria-label="Page Navigation">
+                        <ul class="pagination">
+                            @if (pagination.HasPrevious())
+                            {
+                                <li class="page-item">
+                                    <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@pagination.GetPreviousPage()" class="page-arrow" aria-label="Previous"><span class="icon icon-arrow-left15" aria-hidden="true"></span><span class="sr-only">Previous</span></a>
+                                </li>
+                            }
+                            @foreach (int page in pagination.GetPageList())
+                            {
+                                if (page == pagination.CurrentPage)
+                                {
+                                    <li class="page-item active">
+                                        <div class="page-link">@(page)</div>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="page-item">
+                                        <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@(page)" class="page-link">@(page)</a>
+                                    </li>
+                                }
+                            }
+                            @if (pagination.HasNext())
+                            {
+                                <li class="page-item">
+                                    <a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@pagination.GetNextPage()" class="page-arrow" aria-label="Next"><span class="icon icon-arrow-right16" aria-hidden="true"></span><span class="sr-only">Next</span></a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                }
+            </div>
+        </div>
+    </div>
+</section>

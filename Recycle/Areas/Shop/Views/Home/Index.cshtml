@@ -1,0 +1,207 @@
+﻿@inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
+
+@model Recycle.Areas.Shop.ViewModels.Home.IndexVM
+
+@{
+    ViewData["Title"] = "Shop";
+
+    List<Product> products = (ViewData["Products"] as List<Product>);
+    List<ProductCategory> productCategories = (ViewData["ProductCategories"] as List<ProductCategory>);
+    List<ProductType> productTypes = (ViewData["ProductTypes"] as List<ProductType>);
+
+    Pagination pagination = (ViewData["Pagination"] as Pagination);
+
+    // Gets the minimum and maximum price values in all products:
+    double minPrice = (double)ViewData["ProductsMinPrice"];
+    double maxPrice = (double)ViewData["ProductsMaxPrice"];
+    double currentMinPrice = (Model.MinPrice.HasValue ? Model.MinPrice.Value : minPrice);
+    double currentMaxPrice = (Model.MaxPrice.HasValue ? Model.MaxPrice.Value : maxPrice);
+}
+
+<section class="bg-light-2">
+    <div class="sec-container">
+        <form asp-area="Shop" asp-controller="Home" asp-action="Index" method="get">
+            <input type="hidden" asp-for="CategoryId" data-on-change-submit />
+            <input type="hidden" asp-for="TypeId" data-on-change-submit />
+            <input type="hidden" asp-for="MinPrice" data-on-change-submit />
+            <input type="hidden" asp-for="MaxPrice" data-on-change-submit />
+            <div class="row flex-column-reverse flex-lg-row">
+                <div class="col-xl-3 col-lg-4">
+                    <aside class="form-container bg-white" id="shop-menu">
+                        <div class="shop-menu-sec">
+                            <h3>Category</h3>
+                            <ul class="shop-menu-links">
+                                @foreach (ProductCategory category in productCategories)
+                                {
+                                    <li @(Model.CategoryId.HasValue && Model.CategoryId.Value.Equals(category.Id) ? "class=active" : "")>
+                                        <span>- </span><button type="button" value="@category.Id" data-change-val="#@Html.IdFor(m => Model.CategoryId)">@category.Name</button>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="shop-menu-sec">
+                            <h3>Type</h3>
+                            <ul class="shop-menu-links">
+                                @foreach (ProductType type in productTypes)
+                                {
+                                    <li @(Model.TypeId.HasValue && Model.TypeId.Value.Equals(type.Id) ? "class=active" : "")>
+                                        <span>- </span><button type="button" value="@type.Id" data-change-val="#@Html.IdFor(m => Model.TypeId)">@type.Name</button>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="shop-menu-sec">
+                            <div class="d-flex justify-content-between">
+                                <h3 class="mb-3">Prices</h3>
+                                @if (Model.MinPrice.HasValue || Model.MaxPrice.HasValue)
+                                {
+                                    <button type="button" value="" data-change-val="#@Html.IdFor(m => Model.MinPrice),#@Html.IdFor(m => Model.MaxPrice)" class="btn txt-sm outline-accent px-3 py-2 mb-3">Clear</button>
+                                }
+                            </div>
+                            <div data-slider id="price-range" class="mb-3">
+                                <input type="range" min="@minPrice" max="@maxPrice" step="1" value="@currentMinPrice" data-change-val="#@Html.IdFor(m => Model.MinPrice)" data-slider-min data-slider-label-target="#price-label-min">
+                                <input type="range" min="@minPrice" max="@maxPrice" step="1" value="@currentMaxPrice" data-change-val="#@Html.IdFor(m => Model.MaxPrice)" data-slider-max data-slider-label-target="#price-label-max">
+                            </div>
+                            <div class="d-flex justify-content-between txt-md">
+                                <span>From @ClientCurrency.Currency.Symbol<span id="price-label-min">@Math.Floor(ClientCurrency.GetPrice(currentMinPrice))</span></span>
+                                <span>To @ClientCurrency.Currency.Symbol<span id="price-label-max">@Math.Ceiling(ClientCurrency.GetPrice(currentMaxPrice))</span></span>
+                            </div>
+                        </div>
+                        <div class="shop-menu-sec">
+                            <h3>Keywords</h3>
+                            <div class="i-txt-with-btn-wrapper txt-md">
+                                <input asp-for="Query" class="i-txt bg-input-txt" />
+                                <button type="submit" class="btn outline-primary"><span class="icon icon-search2 icon-top-adjust"></span></button>
+                            </div>
+                        </div>
+                        <div class="shop-menu-sec">
+                            <h3>Special Offers</h3>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" asp-for="Sale" class="custom-control-input" data-on-change-submit />
+                                <label asp-for="Sale" class="custom-control-label txt-primary"></label>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+                <div class="col-xl-9 col-lg-8">
+                    <div class="form-container bg-white mb-5">
+                        <ul class="breadcrumb shop-breadcrumb p-0 mb-5">
+                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="primary-link"><u>Home</u></a></li>
+                            <li class="breadcrumb-item"><button type="button" value="" data-change-val="#@Html.IdFor(m => Model.CategoryId),#@Html.IdFor(m => Model.TypeId)" class="primary-link"><u>Shop</u></button></li>
+                            @if (Model.CategoryId.HasValue)
+                            {
+                                if (Model.TypeId.HasValue)
+                                {
+                                    <li class="breadcrumb-item"><button type="button" value="" data-change-val="#@Html.IdFor(m => Model.TypeId)" class="primary-link"><u>@productCategories.FirstOrDefault(c => c.Id == Model.CategoryId).Name</u></button></li>
+                                }
+                                else
+                                {
+                                    <li class="breadcrumb-item">@productCategories.FirstOrDefault(c => c.Id == Model.CategoryId).Name</li>
+                                }
+                            }
+                            @if (Model.TypeId.HasValue)
+                            {
+                                <li class="breadcrumb-item">@productTypes.FirstOrDefault(t => t.Id == Model.TypeId).Name</li>
+                            }
+                        </ul>
+                        <header class="shop-header bg-light-1 mb-5">
+                            <div class="d-block d-lg-none w-100">
+                                <button id="shop-menu-btn" type="button" class="btn btn-sm txt-md outline-primary"><span class="icon icon-menu5 icon-top-adjust mr-3"></span>Shop Menu</button>
+                            </div>
+                            <div class="mr-5">Showing <strong>@pagination.GetFirstRecordIndexInPage()-@pagination.GetLastRecordIndexInPage()</strong> of <strong>@pagination.TotalRecords</strong> products</div>
+                            <div class="mr-5">
+                                <span>Show:</span>
+                                <select asp-for="PageSize" data-on-change-submit class="form-select txt-title bg-input-txt rounded" aria-label="Select number of products to show in a page.">
+                                    <option value="12" selected>12</option>
+                                    <option value="24">24</option>
+                                    <option value="">All</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span>Sort By:</span>
+                                <select asp-for="Sort" asp-items="Html.GetEnumSelectList<SortOptions>()" data-on-change-submit class="form-select txt-title bg-input-txt rounded" aria-label="Select how to sort the products."></select>
+                            </div>
+                        </header>
+                        <section>
+                            @if (products.Count > 0)
+                            {
+                                <div class="row">
+                                    @foreach (Product product in products)
+                                    {
+                                        <partial name="~/Areas/Shop/Views/Home/_SingleProductPartial.cshtml" model="product" />
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-center txt-secondary p-5 m-0">No Results.</p>
+                            }
+                        </section>
+                        @if (pagination.HasPagination())
+                        {
+                            <nav class="d-flex justify-content-center mt-5 mb-3" aria-label="Page Navigation">
+                                <ul class="pagination">
+                                    @if (pagination.HasPrevious())
+                                    {
+                                        <li class="page-item">
+                                            <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@pagination.GetPreviousPage()" class="page-arrow" aria-label="Previous"><span class="icon icon-arrow-left15" aria-hidden="true"></span><span class="sr-only">Previous</span></a>
+                                        </li>
+                                    }
+                                    @foreach (int page in pagination.GetPageList())
+                                    {
+                                        if (page == pagination.CurrentPage)
+                                        {
+                                            <li class="page-item active">
+                                                <div class="page-link">@(page)</div>
+                                            </li>
+                                        }
+                                        else
+                                        {
+                                            <li class="page-item">
+                                                <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@(page)" class="page-link">@(page)</a>
+                                            </li>
+                                        }
+                                    }
+                                    @if (pagination.HasNext())
+                                    {
+                                        <li class="page-item">
+                                            <a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-all-route-data="Context.Request.Query.ToDictionary()" asp-route-page="@pagination.GetNextPage()" class="page-arrow" aria-label="Next"><span class="icon icon-arrow-right16" aria-hidden="true"></span><span class="sr-only">Next</span></a>
+                                        </li>
+                                    }
+                                </ul>
+                            </nav>
+                        }
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function () {
+            // Gets the conversion rate to the client's currency:
+            var convertionRate = @ClientCurrency.ConversionRate;
+
+            // Shop Menu click (shown in mobile screens):
+            $('#shop-menu-btn').click(function () {
+                var $menu = $('#shop-menu');
+                $('html, body').stop().animate({
+                    'scrollTop': ($menu.offset().top - $('#main-header').outerHeight() - (3 * 10))
+                }, 500, 'swing');
+            });
+
+            // Formats the price labels in the search menu, to convert to client's currency:
+            $('#price-label-min').change(function () {
+                var $this = $(this);
+                $this.text(Math.floor(parseFloat($this.text()) * convertionRate));
+            });
+            $('#price-label-max').change(function () {
+                var $this = $(this);
+                $this.text(Math.ceil(parseFloat($this.text()) * convertionRate));
+            });
+
+        });
+    </script>
+}

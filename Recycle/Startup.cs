@@ -1,4 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Recycle.App_Custom.Services.ClientCurrency;
+using Recycle.App_Custom.Services.ClientShoppingCart;
+using Recycle.App_Custom.Services.ClientTheme;
+using Recycle.App_Custom.Services.UserCache;
+using Recycle.Data;
+using Recycle.Services;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
@@ -11,6 +17,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Recycle.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace Recycle
 {
@@ -27,6 +34,7 @@ namespace Recycle
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
 
             services.AddDbContext<RecycleContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("RecycleContext")));
@@ -37,12 +45,47 @@ namespace Recycle
                 }
             );
 
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status308PermanentRedirect;
+            });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 options =>
                 {
-                    options.LoginPath = "/Users/LogIn";
-                    options.AccessDeniedPath = "/Home/Index";
+                    options.LoginPath = "/login";
+                    options.AccessDeniedPath = "/error/access-denied";
                 });
+
+            // Scoped services:
+            services.AddClientTheme(options =>
+            {
+                options.DefaultTheme = "Light";
+                options.SupportedThemes = new[]
+                {
+                    new Theme("default", "Default"),
+                    new Theme("dark", "Dark"),
+                    new Theme("light", "Light")
+                };
+            });
+            services.AddClientCurrency(options =>
+            {
+                options.DefaultCurrency = "USD";
+                options.SupportedCurrencies = new[]
+                {
+                    new Currency("USD", '$'),
+                    new Currency("EUR", '€'),
+                    new Currency("ILS", '₪'),
+                };
+            });
+            services.AddClientShoppingCart();
+
+            // Transient services:
+            services.AddUserCache();
+            services.AddTransient<UserIdentityService>();
+            services.AddTransient<AuthenticateService>();
+            services.AddTransient<UsersService>();
+            services.AddTransient<OrdersService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,7 +97,8 @@ namespace Recycle
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Error/ExceptionHandler");
+                app.UseStatusCodePagesWithReExecute("/Error/StatusCodeHandler");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -71,7 +115,8 @@ namespace Recycle
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+                );
             });
         }
     }

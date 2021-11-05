@@ -1,62 +1,148 @@
-﻿using DataAnnotationsExtensions;
+﻿using Recycle.Models.Helpers;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Recycle.Models
 {
+    /// <summary>
+    /// Represents a user (customer).
+    /// </summary>
+    [Index(nameof(EmailAddress), IsUnique = true)]
     public class User
     {
+
+        /// <summary>
+        /// The id of the user.
+        /// </summary>
+        /// <remarks>[Primary Key], [Identity]</remarks>
         [Key]
         public int Id { get; set; }
 
+        /// <summary>
+        /// The first name of the user.
+        /// </summary>
         [Display(Name = "First Name")]
-        [Required(ErrorMessage = "First Name is required.")]
+        [Required]
+        [StringLength(50)]
         public string FirstName { get; set; }
 
+        /// <summary>
+        /// The last name of the user.
+        /// </summary>
         [Display(Name = "Last Name")]
-        [Required(ErrorMessage = "Last Name is required.")]
+        [Required]
+        [StringLength(50)]
         public string LastName { get; set; }
 
-        [EmailAddress]
-        [Required(ErrorMessage = "Email address is required.")]
-        [Index(IsUnique = true)]
-        public string Email { get; set; }
+        /// <summary>
+        /// The email address of the user.
+        /// </summary>
+        /// <remarks>[Unique]</remarks>
+        [Display(Name = "Email Address")]
+        [Required]
+        [StringLength(50)]
+        [DataType(DataType.EmailAddress)]
+        public string EmailAddress { get; set; }
 
+        /// <summary>
+        /// The hashed password of the user.
+        /// </summary>
+        [Display(Name = "Password Hash")]
+        [Required]
+        [StringLength(400)]
         [DataType(DataType.Password)]
-        [Required(ErrorMessage = "Password address is required.")]
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
 
-        //[Required(ErrorMessage = "Gender is required.")]
-        public UserGender Gender { get; set; }
+        /// <summary>
+        /// The salt password of the user.
+        /// </summary>
+        [Display(Name = "Password Salt")]
+        [Required]
+        [StringLength(400)]
+        public string PasswordSalt { get; set; }
 
-        [Display(Name = "Birth Date")]
-        [DataType(DataType.Date)]
-        [Required(ErrorMessage = "Birth Date is required.")]
-        public DateTime BDay { get; set; }
+        /// <summary>
+        /// The role of the user.
+        /// </summary>
+        [Display(Name = "Role")]
+        public UserRole Role { get; set; }
 
-        public double Balance { get; set; } = 0.0;
+        /// <summary>
+        /// The phone number of the user.
+        /// </summary>
+        [Display(Name = "Phone Number")]
+        [StringLength(20)]
+        public string PhoneNumber { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public DateTime UpdatedAt { get; set; }
+        /// <summary>
+        /// The currency preference of the user.
+        /// </summary>
+        [Display(Name = "Currency")]
+        [Required]
+        [StringLength(5)]
+        public string Currency { get; set; }
 
-        [Display(Name = "Is Active?")]
-        public bool IsActive { get; set; }
+        /// <summary>
+        /// The theme preference of the user.
+        /// </summary>
+        [Display(Name = "Theme")]
+        [Required]
+        [StringLength(20)]
+        public string Theme { get; set; }
 
+        /// <summary>
+        /// Date and time the user was registered.
+        /// </summary>
+        [Display(Name = "Date Registered")]
+        public DateTime DateRegistered { get; set; }
 
-        // Tables relationship
-        public Store Store { get; set; }
-        public List<ProductComment> ProductsComments { get; set; }
-        public List<StoreComment> StoreComments { get; set; }
-        public Admin Admin { get; set; }
+        /// <summary>
+        /// Date and time of the last modify on the record.
+        /// </summary>
+        [Display(Name = "Date Last Modified")]
+        public DateTime DateLastModified { get; set; }
 
-        [NotMapped]
-        public List<Transaction> TranstionFromThisUser { get; set; }
+        #region Relationships
 
-        [NotMapped]
-        public List<Transaction> TranstionToThisUser { get; set; }
+        /// <summary>
+        /// The address id of the user.
+        /// </summary>
+        /// <remarks>[Foreign Key]</remarks>
+        public int? AddressId { get; set; }
+
+        /// <summary>
+        /// The address of the user.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-One]</remarks>
+        public Address Address { get; set; }
+
+        /// <summary>
+        /// The cart related to the user.
+        /// </summary>
+        /// <remarks>[Foreign Key]</remarks>
+        public int? ClientCartId { get; set; }
+
+        /// <summary>
+        /// The cart related to the user.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-One]</remarks>
+        public ClientCart ClientCart { get; set; }
+
+        /// <summary>
+        /// The wishlist products of the user.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-Many]</remarks>
+        public List<UserWishlistProduct> Wishlist { get; set; }
+
+        /// <summary>
+        /// The list of orders created by the user.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-Many]</remarks>
+        public List<Order> Orders { get; set; }
+
+        #endregion
+
     }
 }
