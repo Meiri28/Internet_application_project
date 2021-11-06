@@ -165,7 +165,6 @@ namespace Recycle.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Currency = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    Theme = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     DateRegistered = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     DateLastModified = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     AddressId = table.Column<int>(type: "int", nullable: true),

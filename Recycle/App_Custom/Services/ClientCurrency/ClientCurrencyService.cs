@@ -237,7 +237,7 @@ namespace Recycle.App_Custom.Services.ClientCurrency
             User user = await _userIdentity.GetCurrentAsync();
             if (user != null)
             {
-                await _users.UpdateUserPreferences(user.Id, currency.Code, user.Theme);
+                await _users.UpdateUserPreferences(user.Id, currency.Code);
             }
         }
 
