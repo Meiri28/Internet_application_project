@@ -47,7 +47,6 @@ namespace Recycle.Areas.Account.Controllers
                 EditPreferencesVM = new ProfileVM.EditPreferencesSubVM()
                 {
                     Currency = user.Currency,
-                    Theme = user.Theme
                 }
             };
             ViewData["SupportedCurrencies"] = new SelectList(_clientCurrency.Options.SupportedCurrencies, nameof(Currency.Code), nameof(Currency.Code));
@@ -108,7 +107,7 @@ namespace Recycle.Areas.Account.Controllers
             if (userId == null)
                 return NotFound();
 
-            await _users.UpdateUserPreferences(userId.Value, model.EditPreferencesVM.Currency, model.EditPreferencesVM.Theme);
+            await _users.UpdateUserPreferences(userId.Value, model.EditPreferencesVM.Currency);
 
             TempData["SuccessTitle"] = "Preferences Updated";
             TempData["SuccessBody"] = "Your preferences has been updated successfully.";

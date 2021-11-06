@@ -156,17 +156,14 @@ namespace Recycle.Services
         /// <param name="currency">The preferred currency code of the user.</param>
         /// <param name="theme">The preferred theme id of the user.</param>
         /// <returns>Returns true if the update has succeeded, otherwise false.</returns>
-        public async Task<bool> UpdateUserPreferences(int userId, string currency, string theme)
+        public async Task<bool> UpdateUserPreferences(int userId, string currency)
         {
             if (string.IsNullOrEmpty(currency))
                 throw new ArgumentNullException(nameof(currency), $"{nameof(currency)} cannot be null or empty.");
-            if (string.IsNullOrEmpty(theme))
-                throw new ArgumentNullException(nameof(theme), $"{nameof(theme)} cannot be null or empty.");
 
             User user = await this.GetByIdAsync(userId);
 
             user.Currency = currency;
-            user.Theme = theme;
             user.DateLastModified = DateTime.Now;
 
             _dbContext.Users.Update(user);

@@ -85,14 +85,6 @@ namespace Recycle.Models
         public string Currency { get; set; }
 
         /// <summary>
-        /// The theme preference of the user.
-        /// </summary>
-        [Display(Name = "Theme")]
-        [Required]
-        [StringLength(20)]
-        public string Theme { get; set; }
-
-        /// <summary>
         /// Date and time the user was registered.
         /// </summary>
         [Display(Name = "Date Registered")]
