@@ -10,7 +10,7 @@
         <div class="modal-content">
             <div class="modal-header px-5 pt-4">
                 <h2 class="modal-title">Wishlist</h2>
-                <button type="button" class="p-3 m-0 h2" data-dismiss="modal" aria-label="Close"><span class="icon icon-close icon-top-adjust" aria-hidden="true"></span></button>
+                <button type="button" class="p-3 m-0 h2" data-dismiss="modal" aria-label="Close"><span class="icon icon-cross icon-top-adjust" aria-hidden="true"></span></button>
             </div>
             <div id="mini-wishlist" class="modal-body px-5 py-4" data-wishlist-add-link="@Url.Action("Add", "Wishlist", new { area = "Account" })" data-wishlist-remove-link="@Url.Action("MiniWishlistRemove", "Wishlist", new { area = "Account" })">
                 @if (user != null)
