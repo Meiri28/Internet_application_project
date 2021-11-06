@@ -1,6 +1,5 @@
 ﻿using Recycle.App_Custom.Services.ClientCurrency;
 using Recycle.App_Custom.Services.ClientShoppingCart;
-using Recycle.App_Custom.Services.ClientTheme;
 using Recycle.App_Custom.Services.UserCache;
 using Recycle.Data;
 using Recycle.Services;
@@ -57,17 +56,10 @@ namespace Recycle
                     options.AccessDeniedPath = "/error/access-denied";
                 });
 
-            // Scoped services:
-            services.AddClientTheme(options =>
-            {
-                options.DefaultTheme = "Light";
-                options.SupportedThemes = new[]
-                {
-                    new Theme("default", "Default"),
-                    new Theme("dark", "Dark"),
-                    new Theme("light", "Light")
-                };
-            });
+            // services:
+
+                //options.DefaultTheme = "Light";
+ 
             services.AddClientCurrency(options =>
             {
                 options.DefaultCurrency = "USD";

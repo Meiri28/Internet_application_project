@@ -1,6 +1,5 @@
 ﻿using Recycle.App_Custom.Helpers;
 using Recycle.App_Custom.Services.ClientCurrency;
-using Recycle.App_Custom.Services.ClientTheme;
 using Recycle.App_Custom.Services.UserCache;
 using Recycle.Data;
 using Recycle.Models;
@@ -26,16 +25,14 @@ namespace Recycle.Services
         private readonly UsersService _users;
         private readonly UserCacheService _userCache;
         private readonly ClientCurrencyService _clientCurrency;
-        private readonly ClientThemeService _clientTheme;
 
-        public AuthenticateService(IHttpContextAccessor httpContextAccessor, RecycleContext dbContext, UsersService users, UserCacheService userCache, ClientCurrencyService clientCurrency, ClientThemeService clientTheme)
+        public AuthenticateService(IHttpContextAccessor httpContextAccessor, RecycleContext dbContext, UsersService users, UserCacheService userCache, ClientCurrencyService clientCurrency)
         {
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
             _users = users;
             _userCache = userCache;
             _clientCurrency = clientCurrency;
-            _clientTheme = clientTheme;
         }
 
         #region Public API
@@ -72,7 +69,6 @@ namespace Recycle.Services
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
                 Currency = _clientCurrency.Currency.Code,
-                Theme = _clientTheme.Theme.ID,
                 Role = UserRole.Customer
             };
             _dbContext.Users.Add(newUser);

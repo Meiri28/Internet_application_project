@@ -1,14 +1,14 @@
 ﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@inject Recycle.App_Custom.Services.ClientTheme.ClientThemeService ClientTheme
 @inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
 
 <!DOCTYPE html>
-<html lang="en" theme="@ClientTheme.Theme.ID">
+<html lang="en" theme="Default">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | Admin | Recycle</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/fonts.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
 </head>
@@ -61,16 +61,15 @@
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user5" aria-hidden="true"></span></a>
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user" aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-nav" data-dd-mega data-dd-mega-start="#main-profile-menu" data-dd-close="0">
                             <ul id="main-profile-menu">
-                                <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" data-dd-close="1" class="shadow-bold"><span class="icon icon-console" aria-hidden="true"></span>Admin Interface</a></li>
+                                <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" data-dd-close="1">Admin Panel</a></li>
                                 <li class="dropdown-divider m-3"></li>
-                                <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1"><span class="icon icon-vcard" aria-hidden="true"></span>Account</a></li>
-                                <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1"><span class="icon icon-exit" aria-hidden="true"></span>Log out</a></li>
+                                <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1">Account Info</a></li>
+                                <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1">Log out</a></li>
                                 <li class="dropdown-divider m-3"></li>
-                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu"><span class="icon icon-coin" aria-hidden="true"></span>Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
-                                <li class="dropdown-sm"><a href="#" role="button" id="main-theme-btn" data-dd-mega-to="#main-theme-menu"><span class="icon icon-palette" aria-hidden="true"></span>Theme: <span class="font-weight-bold" data-updatable>@ClientTheme.Theme.DisplayName</span></a></li>
+                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu">Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
                             </ul>
                             <ul id="main-currency-menu" data-currency-set-link="@Url.Action("UpdateClientCurrency", "Preferences", new { area = "" })">
                                 <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Currency</span></li>
@@ -80,22 +79,6 @@
                                         <a href="#" role="button" data-currency-set="@currency.Code" data-currency-set-symbol="@currency.Symbol" class="d-flex justify-content-between align-items-center">
                                             <span class="line-height-2">@currency.ToString()</span>
                                             @if (currency == ClientCurrency.Currency)
-                                            {
-                                                <span data-dd-check class="float-right m-0 txt-accent icon icon-checkmark2" aria-hidden="true"></span>
-                                            }
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                            <ul id="main-theme-menu" data-theme-set-link="@Url.Action("UpdateClientTheme", "Preferences", new { area = "" })">
-                                <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Theme</span></li>
-                                @foreach (var theme in ClientTheme.Options.SupportedThemes)
-                                {
-                                    <li>
-                                        <a href="#" role="button" data-theme-set="@theme.ID" data-theme-set-display="@theme.DisplayName">
-                                            <span class="icon icon-theme-@theme.ID " aria-hidden="true"></span>
-                                            <span>@string.Format("{0} theme", theme.DisplayName)</span>
-                                            @if (theme == ClientTheme.Theme)
                                             {
                                                 <span data-dd-check class="float-right m-0 txt-accent icon icon-checkmark2" aria-hidden="true"></span>
                                             }

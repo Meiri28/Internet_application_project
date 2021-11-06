@@ -18,13 +18,13 @@
     <menu>
         <ul class="side-menu">
             <li @(Model.Equals("Orders") ? "class=selected" : "")>
-                <a asp-area="Account" asp-controller="Orders" asp-action="Index"><span class="icon icon-stack1" aria-hidden="true"></span>Orders</a>
+                <a asp-area="Account" asp-controller="Orders" asp-action="Index"><span class="icon icon-stack" aria-hidden="true"></span>Orders</a>
             </li>
             <li @(Model.Equals("Wishlist") ? "class=selected" : "")>
-                <a asp-area="Account" asp-controller="Wishlist" asp-action="Index"><span class="icon icon-heart6" aria-hidden="true"></span>Wishlist</a>
+                <a asp-area="Account" asp-controller="Wishlist" asp-action="Index"><span class="icon icon-heart" aria-hidden="true"></span>Wishlist</a>
             </li>
             <li @(Model.Equals("Profile") ? "class=selected" : "")>
-                <a asp-area="Account" asp-controller="Profile" asp-action="Index"><span class="icon icon-vcard" aria-hidden="true"></span>Profile</a>
+                <a asp-area="Account" asp-controller="Profile" asp-action="Index"><span class="icon icon-info" aria-hidden="true"></span>Profile</a>
             </li>
             <li @(Model.Equals("Address") ? "class=selected" : "")>
                 <a asp-area="Account" asp-controller="Profile" asp-action="Address"><span class="icon icon-location" aria-hidden="true"></span>Address</a>

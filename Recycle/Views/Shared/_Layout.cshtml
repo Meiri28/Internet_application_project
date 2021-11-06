@@ -1,17 +1,16 @@
 ﻿@using Recycle.Areas.Account.ViewModels.Newsletter
-
 @inject Microsoft.Extensions.Configuration.IConfiguration Configuration
-@inject Recycle.App_Custom.Services.ClientTheme.ClientThemeService ClientTheme
 @inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
 @inject Recycle.App_Custom.Services.ClientShoppingCart.ClientShoppingCartService ClientCart
 
 <!DOCTYPE html>
-<html lang="en" theme="@ClientTheme.Theme.ID">
+<html lang="en" theme="Default">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] | Recycle</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/fonts.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
 </head>
@@ -46,28 +45,27 @@
                         </div>
                     </li>
                     <li class="dropdown">
-                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon @(Context.User.Identity.IsAuthenticated ? "icon-user5" : "icon-user-plus")" aria-hidden="true"></span></a>
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon @(Context.User.Identity.IsAuthenticated ? "icon-user" : "icon-user-plus")" aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-nav" data-dd-mega data-dd-mega-start="#main-profile-menu" data-dd-close="0">
                             <ul id="main-profile-menu">
                                 @if (Context.User.Identity.IsAuthenticated && Context.User.Identity.GetRole().Equals("Admin"))
                                 {
-                                    <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="shadow-bold" data-dd-close="1"><span class="icon icon-console" aria-hidden="true"></span>Admin Interface</a></li>
+                                    <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" data-dd-close="1">Admin Panel</a></li>
                                     <li class="dropdown-divider m-3"></li>
                                 }
                                 @if (Context.User.Identity.IsAuthenticated)
                                 {
-                                    <li><a asp-area="Account" asp-controller="Orders" asp-action="Index" data-dd-close="1"><span class="icon icon-stack1" aria-hidden="true"></span>Orders</a></li>
-                                    <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1"><span class="icon icon-vcard" aria-hidden="true"></span>Account</a></li>
-                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1"><span class="icon icon-exit" aria-hidden="true"></span>Log out</a></li>
+                                    <li><a asp-area="Account" asp-controller="Orders" asp-action="Index" data-dd-close="1">Orders</a></li>
+                                    <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1">Account Info</a></li>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1">Log out</a></li>
                                 }
                                 else
                                 {
-                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Login" data-dd-close="1"><span class="icon icon-enter" aria-hidden="true"></span>Log In</a></li>
-                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Register" data-dd-close="1"><span class="icon icon-pencil4" aria-hidden="true"></span>Sign Up</a></li>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Login" data-dd-close="1">Log In</a></li>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Register" data-dd-close="1">Sign Up</a></li>
                                 }
                                 <li class="dropdown-divider m-3"></li>
-                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu"><span class="icon icon-coin" aria-hidden="true"></span>Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
-                                <li class="dropdown-sm"><a href="#" role="button" id="main-theme-btn" data-dd-mega-to="#main-theme-menu"><span class="icon icon-palette" aria-hidden="true"></span>Theme: <span class="font-weight-bold" data-updatable>@ClientTheme.Theme.DisplayName</span></a></li>
+                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu">Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
                             </ul>
                             <ul id="main-currency-menu" data-currency-set-link="@Url.Action("UpdateClientCurrency", "Preferences", new { area = "" })">
                                 <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Currency</span></li>
@@ -84,29 +82,13 @@
                                     </li>
                                 }
                             </ul>
-                            <ul id="main-theme-menu" data-theme-set-link="@Url.Action("UpdateClientTheme", "Preferences", new { area = "" })">
-                                <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Theme</span></li>
-                                @foreach (var theme in ClientTheme.Options.SupportedThemes)
-                                {
-                                    <li>
-                                        <a href="#" role="button" data-theme-set="@theme.ID" data-theme-set-display="@theme.DisplayName">
-                                            <span class="icon icon-theme-@theme.ID " aria-hidden="true"></span>
-                                            <span>@string.Format("{0} theme", theme.DisplayName)</span>
-                                            @if (theme == ClientTheme.Theme)
-                                            {
-                                                <span data-dd-check class="float-right m-0 txt-accent icon icon-checkmark2" aria-hidden="true"></span>
-                                            }
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
                         </div>
                     </li>
                     <li>
-                        <a href="#" role="button" data-toggle="modal" data-target="#wishlist-modal"><span class="icon icon-heart6" aria-hidden="true"></span></a>
+                        <a href="#" role="button" data-toggle="modal" data-target="#wishlist-modal"><span class="icon icon-heart" aria-hidden="true"></span></a>
                     </li>
                     <li class="dropdown">
-                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-cart5" aria-hidden="true"></span><span class="count" id="mini-cart-counter" @(ClientCart.IsEmpty() ? "style=display:none;" : "")>@ClientCart.Count()</span></a>
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-cart" aria-hidden="true"></span><span class="count" id="mini-cart-counter" @(ClientCart.IsEmpty() ? "style=display:none;" : "")>@ClientCart.Count()</span></a>
                         <div id="mini-cart" class="dropdown-menu dropdown-menu-right dropdown-nav" data-dd-close="0" data-mini-cart-set-link="@Url.Action("MiniCartSet", "Cart", new { area = "Shop" })" data-mini-cart-remove-link="@Url.Action("MiniCartRemove", "Cart", new { area = "Shop" })">
                             <div class="mini-cart-wrapper" @(ClientCart.IsEmpty() ? "style=display:none;" : "" )>
                                 <div class="mini-cart-items">
@@ -206,21 +188,20 @@
                 <div class="col social">
                     <h3>Social</h3>
                     <ul>
-                        <li><a href="@Configuration.GetSection("Metadata").GetSection("SocialLinks")["Instagram"]" target="_blank"><span class="icon icon-instagram" aria-hidden="true"></span>Instagram</a></li>
-                        <li><a href="@Configuration.GetSection("Metadata").GetSection("SocialLinks")["Facebook"]" target="_blank"><span class="icon icon-facebook1" aria-hidden="true"></span>Facebook</a></li>
-                        <li><a href="@Configuration.GetSection("Metadata").GetSection("SocialLinks")["Twitter"]" target="_blank"><span class="icon icon-twitter" aria-hidden="true"></span>Twitter</a></li>
-                        <li><a href="@Configuration.GetSection("Metadata").GetSection("SocialLinks")["YouTube"]" target="_blank"><span class="icon icon-youtube" aria-hidden="true"></span>YouTube</a></li>
+                        <li><a href="https://www.instagram.com/" target="_blank"><span class="icon icon-instagram" aria-hidden="true"></span>Instagram</a></li>
+                        <li><a href=https://www.facebook.com/" target="_blank"><span class="icon icon-facebook2" aria-hidden="true"></span>Facebook</a></li>
+                        <li><a href="https://www.twitter.com/" target="_blank"><span class="icon icon-twitter" aria-hidden="true"></span>Twitter</a></li>
+                        <li><a href="https://www.yotube.com/" target="_blank"><span class="icon icon-youtube" aria-hidden="true"></span>YouTube</a></li>
                     </ul>
                 </div>
                 <div class="col contact">
                     <h3>Contact us</h3>
-                    <p class="line-height-1-5">@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["Name"]<br>@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["Street"]<br>@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["City"]</p>
-                    <p><span class="icon icon-envelope1" aria-hidden="true"></span><a href="mailto:@Configuration.GetSection("Metadata").GetSection("ContactInfo")["Email"]">@Configuration.GetSection("Metadata").GetSection("ContactInfo")["Email"]</a></p>
-                    <p><span class="icon icon-phone1" aria-hidden="true"></span><a href="tel:@Configuration.GetSection("Metadata").GetSection("ContactInfo")["PhoneLink"]">@Configuration.GetSection("Metadata").GetSection("ContactInfo")["PhoneDisplay"]</a></p>
+                    <p class="line-height-1-5">Recycle Store<br>Elie Wiesel St 2<br>Rishon LeTsiyon</p>
+                    <p><span class="icon icon-mail" aria-hidden="true"></span><a href="mailto:support@recycle.com">support@recycle.com</a></p>
                 </div>
                 <div class="col newsletter">
                     <h3>Join our newsletter</h3>
-                    <p>Get Updates On Awesome Products!<br>Daily Offers &amp; Discounts!</p>
+                    <p>Get update on new products!</p>
                     <partial name="~/Views/Shared/PartialViews/_NewsletterSubscriptionPartial.cshtml" model="new SubscribeVM()" />
                 </div>
             </div>
