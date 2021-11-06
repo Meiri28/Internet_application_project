@@ -45,7 +45,9 @@ namespace Recycle.WebServices.IpApi
             string url = $"{BASE_URL}/{ipAddress}?fields={PARAM_CURRENCY_CODE}";
 
             string response = await HttpClientHelper.GetAsync(url);
-            return JObject.Parse(response).GetValue(PARAM_CURRENCY_CODE).ToString();
+            //return JObject.Parse(response).GetValue(PARAM_CURRENCY_CODE).ToString();
+
+            return "USD";
         }
 
         #endregion

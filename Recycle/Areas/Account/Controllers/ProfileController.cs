@@ -1,6 +1,5 @@
 ﻿using Recycle.App_Custom.ActionFilters;
 using Recycle.App_Custom.Services.ClientCurrency;
-using Recycle.App_Custom.Services.ClientTheme;
 using Recycle.Areas.Account.ViewModels.Profile;
 using Recycle.Models;
 using Recycle.Services;
@@ -19,14 +18,12 @@ namespace Recycle.Areas.Account.Controllers
         private readonly UserIdentityService _userIdentity;
         private readonly UsersService _users;
         private readonly ClientCurrencyService _clientCurrency;
-        private readonly ClientThemeService _clientTheme;
 
-        public ProfileController(UserIdentityService userIdentity, UsersService users, ClientCurrencyService clientCurrency, ClientThemeService clientTheme)
+        public ProfileController(UserIdentityService userIdentity, UsersService users, ClientCurrencyService clientCurrency)
         {
             _userIdentity = userIdentity;
             _users = users;
             _clientCurrency = clientCurrency;
-            _clientTheme = clientTheme;
         }
 
         [Route("/account/profile")]
@@ -54,7 +51,6 @@ namespace Recycle.Areas.Account.Controllers
                 }
             };
             ViewData["SupportedCurrencies"] = new SelectList(_clientCurrency.Options.SupportedCurrencies, nameof(Currency.Code), nameof(Currency.Code));
-            ViewData["SupportedThemes"] = new SelectList(_clientTheme.Options.SupportedThemes, nameof(Theme.ID), nameof(Theme.DisplayName));
             ViewData["UserFullName"] = $"{user.FirstName} {user.LastName}";
             return View(model);
         }
