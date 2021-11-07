@@ -29,7 +29,7 @@ namespace Recycle.Data
         public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Contact> Contacts { get; set; }
-        public DbSet<Branch> Branches { get; set; }
+        public DbSet<Branch> Stores { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -210,7 +210,7 @@ namespace Recycle.Data
 
             #endregion
 
-            #region [Branches] table
+            #region [Stores] table
 
             // Default value on system datetime columns:
             modelBuilder.Entity<Branch>()

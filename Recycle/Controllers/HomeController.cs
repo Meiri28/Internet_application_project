@@ -99,8 +99,8 @@ namespace Recycle.Controllers
         [Route("/stores")]
         public async Task<IActionResult> Stores()
         {
-            List<Branch> branches = await _dbContext.Branches.OrderBy(b => b.Name).ToListAsync();
-            return View(branches);
+            List<Branch> Stores = await _dbContext.Stores.OrderBy(b => b.Name).ToListAsync();
+            return View(Stores);
         }
 
         #region AJAX Actions

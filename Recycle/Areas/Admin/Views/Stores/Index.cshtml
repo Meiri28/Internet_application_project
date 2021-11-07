@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Stores";
 
-    List<Branch> branches = (ViewData["BranchesModel"] as List<Branch>);
+    List<Branch> Stores = (ViewData["StoresModel"] as List<Branch>);
     Pagination pagination = (ViewData["Pagination"] as Pagination);
 }
 
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                     <div class="table-body">
-                        @foreach (Branch branch in branches)
+                        @foreach (Branch branch in Stores)
                         {
                             <div class="table-row hover-bg px-4 py-5">
                                 <div class="d-flex flex-column flex-md-row justify-content-end align-items-center">
@@ -64,7 +64,7 @@
                                 </div>
                             </div>
                         }
-                        @if (branches.Count < 1)
+                        @if (Stores.Count < 1)
                         {
                             <p class="text-center txt-secondary p-5">No Results.</p>
                         }

@@ -25,7 +25,7 @@ namespace Recycle.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Branches",
+                name: "Stores",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -40,7 +40,7 @@ namespace Recycle.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Branches", x => x.Id);
+                    table.PrimaryKey("PK_Stores", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -353,8 +353,8 @@ namespace Recycle.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Branches_Name",
-                table: "Branches",
+                name: "IX_Stores_Name",
+                table: "Stores",
                 column: "Name",
                 unique: true);
 
@@ -468,7 +468,7 @@ namespace Recycle.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Branches");
+                name: "Stores");
 
             migrationBuilder.DropTable(
                 name: "ClientCartProducts");
