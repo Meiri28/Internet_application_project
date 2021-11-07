@@ -61,7 +61,7 @@
 
 @section Scripts {
     <script>
-        var _branchesData = @Html.Raw(Json.Serialize(Model.Select(b => new { name = b.Name, latitude = b.LocationLatitude, longitude = b.LocationLongitude })));
+        var _StoresData = @Html.Raw(Json.Serialize(Model.Select(b => new { name = b.Name, latitude = b.LocationLatitude, longitude = b.LocationLongitude })));
         var _map;
         var _infoWindow;
         var _markers;
@@ -69,17 +69,17 @@
         function initStoresMap() {
             _map = new google.maps.Map(document.getElementById("map-container"), {
                 zoom: 8,
-                center: { lat: _branchesData[0].latitude, lng: _branchesData[0].longitude }
+                center: { lat: _StoresData[0].latitude, lng: _StoresData[0].longitude }
             });
 
             _infoWindow = new google.maps.InfoWindow();
 
-            // Adds the markers of branches locations:
+            // Adds the markers of Stores locations:
             _markers = [];
-            for (var i = 0; i < _branchesData.length; i++) {
+            for (var i = 0; i < _StoresData.length; i++) {
                 _markers.push(new google.maps.Marker({
-                    position: { lat: _branchesData[i].latitude, lng: _branchesData[i].longitude },
-                    title: _branchesData[i].name,
+                    position: { lat: _StoresData[i].latitude, lng: _StoresData[i].longitude },
+                    title: _StoresData[i].name,
                     map: _map
                 }));
                 _markers[i].addListener("click", () =>

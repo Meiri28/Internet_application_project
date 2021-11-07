@@ -27,19 +27,19 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores
         public async Task<IActionResult> Index(IndexVM model)
         {
-            List<Branch> branches = await _dbContext.Branches
+            List<Branch> Stores = await _dbContext.Stores
                 .Where(b => (model.Query == null) || b.Name.Contains(model.Query))
                 .OrderBy(b => b.Name)
                 .ToListAsync();
 
             #region Pagination...
 
-            Pagination pagination = new Pagination(branches.Count, model.PageSize, model.Page);
+            Pagination pagination = new Pagination(Stores.Count, model.PageSize, model.Page);
             if (pagination.HasPagination())
             {
                 if (pagination.PageSize.HasValue)
                 {
-                    branches = branches
+                    Stores = Stores
                         .Skip(pagination.GetRecordsSkipped())
                         .Take(pagination.PageSize.Value)
                         .ToList();
@@ -49,14 +49,14 @@ namespace Recycle.Areas.Admin.Controllers
 
             #endregion
 
-            ViewData["BranchesModel"] = branches;
+            ViewData["StoresModel"] = Stores;
             return View(model);
         }
 
         // GET: /Admin/Stores/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
-            Branch branch = await _dbContext.Branches.FirstOrDefaultAsync(b => b.Id == id);
+            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
             if (branch == null)
                 return NotFound();
             else
@@ -86,7 +86,7 @@ namespace Recycle.Areas.Admin.Controllers
                 LocationLatitude = model.LocationLatitude,
                 LocationLongitude = model.LocationLongitude
             };
-            _dbContext.Branches.Add(branch);
+            _dbContext.Stores.Add(branch);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -94,7 +94,7 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
-            Branch branch = await _dbContext.Branches.FindAsync(id);
+            Branch branch = await _dbContext.Stores.FindAsync(id);
             if (branch == null)
                 return NotFound();
             else
@@ -122,7 +122,7 @@ namespace Recycle.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            Branch branch = await _dbContext.Branches.FirstOrDefaultAsync(b => b.Id == id);
+            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
             if (branch == null)
                 return NotFound();
 
@@ -135,7 +135,7 @@ namespace Recycle.Areas.Admin.Controllers
             branch.LocationLongitude = model.LocationLongitude;
             branch.DateLastModified = DateTime.Now;
 
-            _dbContext.Branches.Update(branch);
+            _dbContext.Stores.Update(branch);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -143,7 +143,7 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores/Delete/{id}
         public async Task<IActionResult> Delete(int id)
         {
-            Branch branch = await _dbContext.Branches.FirstOrDefaultAsync(b => b.Id == id);
+            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
             if (branch == null)
                 return NotFound();
             else
@@ -156,8 +156,8 @@ namespace Recycle.Areas.Admin.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> Delete_POST(int id)
         {
-            Branch branch = await _dbContext.Branches.FindAsync(id);
-            _dbContext.Branches.Remove(branch);
+            Branch branch = await _dbContext.Stores.FindAsync(id);
+            _dbContext.Stores.Remove(branch);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -167,7 +167,7 @@ namespace Recycle.Areas.Admin.Controllers
         [AjaxOnly]
         public async Task<JsonResult> CheckNameAvailability(string name)
         {
-            bool isNameAvailable = (await _dbContext.Branches.AnyAsync(b => b.Name.Equals(name)) == false);
+            bool isNameAvailable = (await _dbContext.Stores.AnyAsync(b => b.Name.Equals(name)) == false);
             return Json(isNameAvailable);
         }
 
@@ -182,7 +182,7 @@ namespace Recycle.Areas.Admin.Controllers
             // Otherwise, name was changed so checks availability:
             else
             {
-                bool isNameAvailable = (await _dbContext.Branches.AnyAsync(b => b.Name.Equals(name)) == false);
+                bool isNameAvailable = (await _dbContext.Stores.AnyAsync(b => b.Name.Equals(name)) == false);
                 return Json(isNameAvailable);
             }
         }
