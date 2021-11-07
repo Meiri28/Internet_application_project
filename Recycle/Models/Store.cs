@@ -5,21 +5,21 @@ using System.ComponentModel.DataAnnotations;
 namespace Recycle.Models
 {
     /// <summary>
-    /// Represents a branch information.
+    /// Represents a Store information.
     /// </summary>
     [Index(nameof(Name), IsUnique = true)]
-    public class Branch
+    public class Store
     {
 
         /// <summary>
-        /// The id of the branch.
+        /// The id of the Store.
         /// </summary>
         /// <remarks>[Primary Key], [Identity]</remarks>
         [Key]
         public int Id { get; set; }
 
         /// <summary>
-        /// The name of the branch.
+        /// The name of the Store.
         /// </summary>
         /// <remarks>[Unique]</remarks>
         [Display(Name = "Name")]
@@ -28,7 +28,7 @@ namespace Recycle.Models
         public string Name { get; set; }
 
         /// <summary>
-        /// The address of the branch.
+        /// The address of the Store.
         /// </summary>
         [Display(Name = "Address")]
         [Required]
@@ -36,7 +36,7 @@ namespace Recycle.Models
         public string Address { get; set; }
 
         /// <summary>
-        /// The phone number of the branch.
+        /// The phone number of the Store.
         /// </summary>
         [Display(Name = "Phone Number")]
         [Required]
@@ -44,7 +44,7 @@ namespace Recycle.Models
         public string PhoneNumber { get; set; }
 
         /// <summary>
-        /// The opening hours of the branch.
+        /// The opening hours of the Store.
         /// </summary>
         [Display(Name = "Opening Hours")]
         [Required]
@@ -53,14 +53,14 @@ namespace Recycle.Models
         public string OpeningHours { get; set; }
 
         /// <summary>
-        /// The latitude of the branch location.
+        /// The latitude of the Store location.
         /// </summary>
         [Display(Name = "Location Latitude")]
         [Required]
         public double LocationLatitude { get; set; }
 
         /// <summary>
-        /// The longitude of the branch location.
+        /// The longitude of the Store location.
         /// </summary>
         [Display(Name = "Location Longitude")]
         [Required]

@@ -99,7 +99,7 @@ namespace Recycle.Controllers
         [Route("/stores")]
         public async Task<IActionResult> Stores()
         {
-            List<Branch> Stores = await _dbContext.Stores.OrderBy(b => b.Name).ToListAsync();
+            List<Store> Stores = await _dbContext.Stores.OrderBy(b => b.Name).ToListAsync();
             return View(Stores);
         }
 

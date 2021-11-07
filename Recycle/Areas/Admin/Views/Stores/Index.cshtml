@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Stores";
 
-    List<Branch> Stores = (ViewData["StoresModel"] as List<Branch>);
+    List<Store> Stores = (ViewData["StoresModel"] as List<Store>);
     Pagination pagination = (ViewData["Pagination"] as Pagination);
 }
 
@@ -49,17 +49,17 @@
                         </div>
                     </div>
                     <div class="table-body">
-                        @foreach (Branch branch in Stores)
+                        @foreach (Store Store in Stores)
                         {
                             <div class="table-row hover-bg px-4 py-5">
                                 <div class="d-flex flex-column flex-md-row justify-content-end align-items-center">
                                     <div class="flex-fill w-100 w-md-auto text-center text-md-left px-4 mb-4 mb-md-0">
-                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Details" asp-route-id="@branch.Id" class="primary-link text-ellipsis d-inline-block font-weight-bold">@branch.Name</a>
+                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Details" asp-route-id="@Store.Id" class="primary-link text-ellipsis d-inline-block font-weight-bold">@Store.Name</a>
                                     </div>
                                     <div class="w-100 w-md-auto text-center text-md-right px-3">
-                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Details" asp-route-id="@branch.Id" class="btn btn-sm txt-md outline-info m-1">Details</a>
-                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Edit" asp-route-id="@branch.Id" class="btn btn-sm txt-md outline-warning m-1">Edit</a>
-                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Delete" asp-route-id="@branch.Id" class="btn btn-sm txt-md outline-danger m-1">Delete</a>
+                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Details" asp-route-id="@Store.Id" class="btn btn-sm txt-md outline-info m-1">Details</a>
+                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Edit" asp-route-id="@Store.Id" class="btn btn-sm txt-md outline-warning m-1">Edit</a>
+                                        <a asp-area="Admin" asp-controller="Stores" asp-action="Delete" asp-route-id="@Store.Id" class="btn btn-sm txt-md outline-danger m-1">Delete</a>
                                     </div>
                                 </div>
                             </div>
