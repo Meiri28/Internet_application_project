@@ -7,7 +7,7 @@ namespace Recycle.Areas.Admin.ViewModels.Stores
     {
 
         /// <summary>
-        /// The id of the branch.
+        /// The id of the Store.
         /// </summary>
         /// <remarks>[Primary Key], [Identity]</remarks>
         [Key]
@@ -18,7 +18,7 @@ namespace Recycle.Areas.Admin.ViewModels.Stores
         public string CurrentName { get; set; }
 
         /// <summary>
-        /// The name of the branch.
+        /// The name of the Store.
         /// </summary>
         /// <remarks>[Unique]</remarks>
         [Display(Name = "Name *")]

@@ -27,7 +27,7 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores
         public async Task<IActionResult> Index(IndexVM model)
         {
-            List<Branch> Stores = await _dbContext.Stores
+            List<Store> Stores = await _dbContext.Stores
                 .Where(b => (model.Query == null) || b.Name.Contains(model.Query))
                 .OrderBy(b => b.Name)
                 .ToListAsync();
@@ -56,11 +56,11 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
-            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
-            if (branch == null)
+            Store Store = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
+            if (Store == null)
                 return NotFound();
             else
-                return View(branch);
+                return View(Store);
         }
 
         // GET: /Admin/Stores/Create
@@ -77,7 +77,7 @@ namespace Recycle.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            Branch branch = new Branch()
+            Store Store = new Store()
             {
                 Name = model.Name,
                 Address = model.Address,
@@ -86,7 +86,7 @@ namespace Recycle.Areas.Admin.Controllers
                 LocationLatitude = model.LocationLatitude,
                 LocationLongitude = model.LocationLongitude
             };
-            _dbContext.Stores.Add(branch);
+            _dbContext.Stores.Add(Store);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -94,20 +94,20 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
-            Branch branch = await _dbContext.Stores.FindAsync(id);
-            if (branch == null)
+            Store Store = await _dbContext.Stores.FindAsync(id);
+            if (Store == null)
                 return NotFound();
             else
                 return View(new EditVM()
                 {
-                    Id = branch.Id,
-                    CurrentName = branch.Name,
-                    Name = branch.Name,
-                    Address = branch.Address,
-                    PhoneNumber = branch.PhoneNumber,
-                    OpeningHours = branch.OpeningHours,
-                    LocationLatitude = branch.LocationLatitude,
-                    LocationLongitude = branch.LocationLongitude
+                    Id = Store.Id,
+                    CurrentName = Store.Name,
+                    Name = Store.Name,
+                    Address = Store.Address,
+                    PhoneNumber = Store.PhoneNumber,
+                    OpeningHours = Store.OpeningHours,
+                    LocationLatitude = Store.LocationLatitude,
+                    LocationLongitude = Store.LocationLongitude
                 });
         }
 
@@ -122,20 +122,20 @@ namespace Recycle.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
-            if (branch == null)
+            Store Store = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
+            if (Store == null)
                 return NotFound();
 
             // Binds the view model:
-            branch.Name = model.Name;
-            branch.Address = model.Address;
-            branch.PhoneNumber = model.PhoneNumber;
-            branch.OpeningHours = model.OpeningHours;
-            branch.LocationLatitude = model.LocationLatitude;
-            branch.LocationLongitude = model.LocationLongitude;
-            branch.DateLastModified = DateTime.Now;
+            Store.Name = model.Name;
+            Store.Address = model.Address;
+            Store.PhoneNumber = model.PhoneNumber;
+            Store.OpeningHours = model.OpeningHours;
+            Store.LocationLatitude = model.LocationLatitude;
+            Store.LocationLongitude = model.LocationLongitude;
+            Store.DateLastModified = DateTime.Now;
 
-            _dbContext.Stores.Update(branch);
+            _dbContext.Stores.Update(Store);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -143,11 +143,11 @@ namespace Recycle.Areas.Admin.Controllers
         // GET: /Admin/Stores/Delete/{id}
         public async Task<IActionResult> Delete(int id)
         {
-            Branch branch = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
-            if (branch == null)
+            Store Store = await _dbContext.Stores.FirstOrDefaultAsync(b => b.Id == id);
+            if (Store == null)
                 return NotFound();
             else
-                return View(branch);
+                return View(Store);
         }
 
         // POST: /Admin/Stores/Delete/{id}
@@ -156,8 +156,8 @@ namespace Recycle.Areas.Admin.Controllers
         [ActionName("Delete")]
         public async Task<IActionResult> Delete_POST(int id)
         {
-            Branch branch = await _dbContext.Stores.FindAsync(id);
-            _dbContext.Stores.Remove(branch);
+            Store Store = await _dbContext.Stores.FindAsync(id);
+            _dbContext.Stores.Remove(Store);
             await _dbContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
