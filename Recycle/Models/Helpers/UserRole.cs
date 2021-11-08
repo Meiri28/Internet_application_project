@@ -11,8 +11,14 @@
         Customer = 0,
 
         /// <summary>
-        /// Marks a user role as admin.
+        /// Marks a user role as Seller.
         /// </summary>
-        Admin = 1
+        Seller = 1,
+
+        ///<summary>
+        ///Mark a user role as Admin
+        ///</summary>
+        Admin = 2,
+        
     }
 }
