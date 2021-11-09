@@ -92,7 +92,6 @@ namespace Recycle.Areas.Admin.Controllers
             return View(new CreateVM()
             {
                 IsAvailable = true,
-                Tweet = false
             });
         }
 

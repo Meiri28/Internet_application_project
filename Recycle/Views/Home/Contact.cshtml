@@ -5,32 +5,6 @@
 @{
     ViewData["Title"] = "Contact Us";
 }
-
-<section id="how-to-reach" class="bg-light-2">
-    <div class="sec-container">
-        <div class="container">
-            <h3 class="txt-accent text-uppercase text-center mb-3">How To Reach Us</h3>
-            <div class="row">
-                <div class="col-md-4 col-sm-0 text-center mt-5">
-                    <div class="circle-icon"><span class="icon icon-location"></span></div>
-                    <h3>Address</h3>
-                    <p class="txt-md">@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["Name"]<br>@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["Street"]<br>@Configuration.GetSection("Metadata").GetSection("ContactInfo").GetSection("Address")["City"]</p>
-                </div>
-                <div class="col-md-4 col-sm-6 text-center mt-5">
-                    <div class="circle-icon"><span class="icon icon-phone1"></span></div>
-                    <h3>Phone Number</h3>
-                    <p class="txt-md"><a href="tel:@Configuration.GetSection("Metadata").GetSection("ContactInfo")["PhoneLink"]" class="primary-link">@Configuration.GetSection("Metadata").GetSection("ContactInfo")["PhoneDisplay"]</a></p>
-                </div>
-                <div class="col-md-4 col-xs-6 text-center mt-5">
-                    <div class="circle-icon"><span class="icon icon-envelope1"></span></div>
-                    <h3>Email Address</h3>
-                    <p class="txt-md"><a href="mailto:@Configuration.GetSection("Metadata").GetSection("ContactInfo")["Email"]" class="primary-link">@Configuration.GetSection("Metadata").GetSection("ContactInfo")["Email"]</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
 <section class="bg-light-3">
     <div class="sec-container">
         <div class="container maxw-md py-5-desktop">
@@ -83,10 +57,10 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content modal-shadow">
                 <div class="modal-header">
-                    <h2 class="modal-title"><span class="icon icon-checkmark2 icon-top-adjust mr-3" aria-hidden="true"></span>Contact Received</h2>
+                    <h2 class="modal-title"><span class="icon icon-checkmark2 icon-top-adjust mr-3" aria-hidden="true"></span>Sended</h2>
                 </div>
                 <div class="modal-body">
-                    <p class="p-2 m-0">We have received your message successfully.<br />We will reply to you soon, thank you.</p>
+                    <p class="p-2 m-0">Recyle support team received your message successfully.<br />We will reply as soon as possible, thank you.</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary px-5" data-dismiss="modal">OK</button>

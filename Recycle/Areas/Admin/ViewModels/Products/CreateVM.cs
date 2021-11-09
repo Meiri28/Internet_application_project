@@ -49,12 +49,6 @@ namespace Recycle.Areas.Admin.ViewModels.Products
         [Required(ErrorMessage = "Availability is required.")]
         public bool IsAvailable { get; set; }
 
-        [Display(Name = "Tweet about this")]
-        public bool Tweet { get; set; }
-
-        [Display(Name = "Tweet Text *", Prompt = "Type here text to tweet...")]
-        [RequiredIfChecked(nameof(Tweet), ErrorMessage = "Tweet text is required.")]
-        public string TweetText { get; set; }
 
         #region Relationships
 

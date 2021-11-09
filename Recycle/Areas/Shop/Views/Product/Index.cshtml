@@ -19,8 +19,6 @@
     <div class="sec-container">
         <div class="form-container bg-white">
             <ul class="breadcrumb product-breadcrumb bg-light-1 p-4 mb-5">
-                <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="primary-link"><u>Home</u></a></li>
-                <li class="breadcrumb-item"><a asp-area="Shop" asp-controller="Home" asp-action="Index" class="primary-link"><u>Shop</u></a></li>
                 <li class="breadcrumb-item"><a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="@Model.Category.Name" class="primary-link"><u>@Model.Category.Name</u></a></li>
                 <li class="breadcrumb-item"><a asp-area="Shop" asp-controller="Home" asp-action="Index" asp-route-category="@Model.Category.Name" asp-route-type="@Model.Type.Name" class="primary-link"><u>@Model.Type.Name</u></a></li>
                 <li class="breadcrumb-item">@Model.Name</li>

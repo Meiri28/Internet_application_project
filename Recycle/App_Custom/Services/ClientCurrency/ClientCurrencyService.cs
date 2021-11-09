@@ -163,6 +163,7 @@ namespace Recycle.App_Custom.Services.ClientCurrency
 
             // (1) - Checks if the user is authenticated - then gets the currency from the DB:
             if (_userIdentity.IsAuthenticated())
+                
                 userCurrency = Task.Run(() => GetUserCurrencyByDatabase()).Result;
 
             // (2) - User is not authenticated - so gets the currency from the cookie:
