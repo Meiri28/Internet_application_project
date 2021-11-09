@@ -24,10 +24,10 @@
                 <h1 class="title-1 font-weight-bold mb-5">Admin Panel</h1>
                 <div class="flex-fill text-right mt-md-4 mb-5">
                     <div class="btn-group ml-sm-5" role="group" aria-label="Dashboard Period Selector">
-                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Today" class="btn btn-sm @(Model.Period == Periods.Today ? "btn-primary" : "outline-primary") d-flex align-items-center">Today</a>
-                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisMonth" class="btn btn-sm @(Model.Period == Periods.ThisMonth ? "btn-primary" : "outline-primary") d-flex align-items-center">This Month</a>
-                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisYear" class="btn btn-sm @(Model.Period == Periods.ThisYear ? "btn-primary" : "outline-primary") d-flex align-items-center">This Year</a>
-                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Lifetime" class="btn btn-sm @(Model.Period == Periods.Lifetime ? "btn-primary" : "outline-primary") d-flex align-items-center">Lifetime</a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Today" class="btn btn-sm @(Model.Period == Periods.Today ? "btn-primary" : "outline-primary") d-flex align-items-center">Now</a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisMonth" class="btn btn-sm @(Model.Period == Periods.ThisMonth ? "btn-primary" : "outline-primary") d-flex align-items-center">Month</a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisYear" class="btn btn-sm @(Model.Period == Periods.ThisYear ? "btn-primary" : "outline-primary") d-flex align-items-center">Year</a>
+                        <a asp-area="Admin" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Lifetime" class="btn btn-sm @(Model.Period == Periods.Lifetime ? "btn-primary" : "outline-primary") d-flex align-items-center">All</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                         <div class="form-container bg-white border-left-bold border-success hover-push p-4">
                             <div class="row no-gutters align-items-center">
                                 <div class="col text-ellipsis mr-2">
-                                    <div class="txt-md font-weight-bold text-success text-uppercase text-ellipsis px-3 py-1 mb-1">Total $$$</div>
+                                    <div class="txt-md font-weight-bold text-success text-uppercase text-ellipsis px-3 py-1 mb-1">Total Profit</div>
                                     <div class="txt-xl font-weight-bold txt-title px-3 py-1">@string.Format("{0}{1:0}", ClientCurrency.Currency.Symbol, (double)ViewData["Results_TotalEarnings"])</div>
                                 </div>
                                 <div class="col-auto">
@@ -64,10 +64,10 @@
                 </div>
                 <div class="col-xl-4 col-md-4 mb-4">
                     <a asp-area="Admin" asp-controller="Orders" asp-action="Index" asp-route-status="@((int)OrderStatus.Packing)">
-                        <div class="form-container bg-white border-left-bold border-pink hover-push p-4">
+                        <div class="form-container bg-white border-left-bold border-red hover-push p-4">
                             <div class="row no-gutters align-items-center">
                                 <div class="col text-ellipsis mr-2">
-                                    <div class="txt-md font-weight-bold txt-pink text-uppercase text-ellipsis px-3 py-1 mb-1">Orders</div>
+                                    <div class="txt-md font-weight-bold txt-red text-uppercase text-ellipsis px-3 py-1 mb-1">Orders to packing</div>
                                     <div class="txt-xl font-weight-bold txt-title px-3 py-1">@ViewData["Results_OrdersAwaiting"]</div>
                                 </div>
                                 <div class="col-auto">
@@ -86,8 +86,8 @@
                         <div class="form-container bg-white border-left-bold border-success hover-push p-4">
                             <div class="row no-gutters align-items-center">
                                 <div class="col text-ellipsis mr-2">
-                                    <div class="txt-md font-weight-bold text-success text-uppercase text-ellipsis px-3 py-1 mb-1">Orders</div>
-                                    <div class="txt-xl font-weight-bold txt-title px-3 py-1">@bestSellingData.Count</div>
+                                    <div class="txt-md font-weight-bold text-success text-uppercase text-ellipsis px-3 py-1 mb-1">All Orders</div>
+                                    <div class="txt-xl font-weight-bold txt-title px-3 py-1"> @ViewData["All_Orders"]</div>
                                 </div>
                                 <div class="col-auto">
                                     <span class="icon icon-briefcase2 txt-faded display-3 px-3" aria-hidden="true"></span>
@@ -103,7 +103,7 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col text-ellipsis mr-2">
                                     <div class="txt-md font-weight-bold txt-sky text-uppercase text-ellipsis px-3 py-1 mb-1">Average Customer Spending</div>
-                                    <div class="txt-xl font-weight-bold txt-title px-3 py-1">@avgCustomerSpendingData.GetAverageValues()</div>
+                                    <div class="txt-xl font-weight-bold txt-title px-3 py-1">@ViewData["Results_AvgCustomerSpendingTS"]</div>
                                 </div>
                                 <div class="col-auto">
                                     <span class="icon icon-users3 txt-faded display-3 px-3" aria-hidden="true"></span>

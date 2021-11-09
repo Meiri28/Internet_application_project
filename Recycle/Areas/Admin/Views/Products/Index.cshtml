@@ -10,10 +10,6 @@
 <section class="bg-light-2">
     <div class="sec-container">
         <div class="maxw-2xl m-auto">
-            <ul class="breadcrumb p-0 mb-5">
-                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="primary-link"><u>Admin</u></a></li>
-                <li class="breadcrumb-item">Products</li>
-            </ul>
             <h1 class="title-1 font-weight-bold mb-5">Products</h1>
             <div class="form-container bg-white mb-5">
                 <form asp-area="Admin" asp-controller="Products" asp-action="Index" method="get">
@@ -100,9 +96,9 @@
                                         </div>
                                     </div>
                                     <div class="w-100 w-md-auto text-center text-lg-right px-3">
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn btn-sm txt-md outline-info m-1">Details</a>
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm txt-md outline-warning m-1">Edit</a>
-                                        <a asp-area="Admin" asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-sm txt-md outline-danger m-1">Delete</a>
+                                        <a asp-area="Admin" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="btn outline-info">Details</a>
+                                        <a asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id" class="btn outline-warning">Edit</a>
+                                        <a asp-area="Admin" asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" class="btn outline-danger">Delete</a>
                                     </div>
                                 </div>
                             </div>

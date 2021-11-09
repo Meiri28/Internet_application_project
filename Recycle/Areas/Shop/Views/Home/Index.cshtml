@@ -86,7 +86,6 @@
                 <div class="col-xl-9 col-lg-8">
                     <div class="form-container bg-white mb-5">
                         <ul class="breadcrumb shop-breadcrumb p-0 mb-5">
-                            <li class="breadcrumb-item"><a asp-area="" asp-controller="Home" asp-action="Index" class="primary-link"><u>Home</u></a></li>
                             <li class="breadcrumb-item"><button type="button" value="" data-change-val="#@Html.IdFor(m => Model.CategoryId),#@Html.IdFor(m => Model.TypeId)" class="primary-link"><u>Shop</u></button></li>
                             @if (Model.CategoryId.HasValue)
                             {
@@ -112,8 +111,9 @@
                             <div class="mr-5">
                                 <span>Show:</span>
                                 <select asp-for="PageSize" data-on-change-submit class="form-select txt-title bg-input-txt rounded" aria-label="Select number of products to show in a page.">
-                                    <option value="12" selected>12</option>
-                                    <option value="24">24</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
                                     <option value="">All</option>
                                 </select>
                             </div>

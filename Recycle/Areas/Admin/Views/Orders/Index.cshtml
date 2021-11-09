@@ -12,10 +12,6 @@
 <section class="bg-light-2">
     <div class="sec-container">
         <div class="maxw-2xl m-auto">
-            <ul class="breadcrumb p-0 mb-5">
-                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="primary-link"><u>Admin</u></a></li>
-                <li class="breadcrumb-item">Orders</li>
-            </ul>
             <h1 class="title-1 font-weight-bold mb-5">Orders</h1>
             <div class="form-container bg-white mb-5">
                 <form asp-area="Admin" asp-controller="Orders" asp-action="Index" method="get">
@@ -119,9 +115,9 @@
                                         </div>
                                     </div>
                                     <div class="w-100 w-md-auto text-center text-lg-right px-3">
-                                        <a asp-area="Admin" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" class="btn btn-sm txt-md outline-info m-1">Details</a>
+                                        <a asp-area="Admin" asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" class="btn outline-info">Details</a>
                                         <div class="dropdown d-inline-block">
-                                            <button type="button" id="@($"ChangeStatus{order.Id}")" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-sm txt-md outline-warning m-1">Change Status</button>
+                                            <button type="button" id="@($"ChangeStatus{order.Id}")" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn outline-warning">Change Status</button>
                                             <div class="dropdown-menu" aria-labelledby="@($"ChangeStatus{order.Id}")">
                                                 <form asp-area="Admin" asp-controller="Orders" asp-action="IndexUpdateStatus" method="post">
                                                     <input type="hidden" name="id" value="@Html.ValueFor(m => order.Id)" />
@@ -132,7 +128,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        <a asp-area="Admin" asp-controller="Orders" asp-action="Delete" asp-route-id="@order.Id" class="btn btn-sm txt-md outline-danger m-1">Delete</a>
+                                        <a asp-area="Admin" asp-controller="Orders" asp-action="Delete" asp-route-id="@order.Id" class="btn outline-danger">Delete</a>
                                     </div>
                                 </div>
                             </div>

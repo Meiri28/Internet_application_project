@@ -63,7 +63,7 @@ html[theme="default"] {
     --color-background-invert: #eeeeee;
     --color-text-invert: #565656;
     --color-text-title-invert: #181818;
-    --color-primary: #151515;
+    --color-primary: #000000;
     --color-primary-invert: #ffffff;
     --color-secondary: #929292;
     --color-light-dimmer: rgba(255,255,255,0.5);
@@ -521,6 +521,11 @@ span.icon.icon-arrow-left2.h1 {
 
 .border-sky {
     border-color: var(--color-sky) !important;
+}
+
+.border-red {
+    color: red !important;
+    border-color: red !important;
 }
 
 /*#endregion */
@@ -2129,20 +2134,11 @@ html[theme="light"] #main-logo {
 #main-menu > ul > li > a {
     display: block;
     color: var(--color-invert);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     line-height: 1.5;
-    text-transform: uppercase;
     letter-spacing: 0.2rem;
     padding: 1rem 1.5rem;
     position: relative;
-}
-
-#main-menu .dropdown-show > a:after {
-    font-family: 'icons' !important;
-    content: '\e412';
-    font-size: 90%;
-    margin-left: 0.5rem;
-    opacity: 0.6;
 }
 
 #main-menu .dropdown-nav li a {
@@ -2594,7 +2590,7 @@ html[theme="light"] #main-logo {
 
 @media screen and (max-width: 480px) {
     #main-header #main-logo {
-        width: 3rem;
+        width: 10rem;
         background-image: url("../images/logo.jpg");
     }
 
@@ -3499,8 +3495,8 @@ html[theme="dark"] .newspaper .paper-cut-bottom {
 
         #main-admin-logo a > .logo {
             display: inline-block;
-            height: 12rem;
-            width: 12rem;
+            height: 10rem;
+            width: 10rem;
             background-image: url("../images/logo.jpg");
             background-size: 100%;
             background-repeat: no-repeat;

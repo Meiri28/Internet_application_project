@@ -20,21 +20,19 @@
                 <h1 id="main-admin-logo">
                     <a asp-area="Admin" asp-controller="Home" asp-action="Index">
                         <span class="logo"></span>
-                        <span>| Admin</span>
+                        <span> Admin</span>
                     </a>
                 </h1>
-                <button id="main-menu-toggler" class="text-shadow" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Menu">
-                    <span class="icon icon-menu3" aria-hidden="true"></span>
-                </button>
+
             </div>
             <div class="lay-middle">
                 <nav id="main-menu">
                     <ul class="header-list links-text-shadow">
                         <li><a asp-area="Admin" asp-controller="Orders" asp-action="Index">Orders</a></li>
                         <li><a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a></li>
-                        <li><a asp-area="Admin" asp-controller="Contacts" asp-action="Index">Contacts</a></li>
+                        <li><a asp-area="Admin" asp-controller="Stores" asp-action="Index">Stores</a></li>
                         <li class="dropdown-show">
-                            <a>Shop</a>
+                            <a class="dropdown-toggle dropdown-toggle-split">Shop</a>
                             <ul class="dropdown-nav category-list">
                                 <li><a asp-area="Admin" asp-controller="Products" asp-action="Index">Products</a></li>
                                 <li><a asp-area="Admin" asp-controller="Sales" asp-action="Index">Sales</a></li>
@@ -43,28 +41,21 @@
                                 <li><a asp-area="Admin" asp-controller="DeliveryMethods" asp-action="Index">Delivery Methods</a></li>
                             </ul>
                         </li>
-                        <li><a asp-area="Admin" asp-controller="Stores" asp-action="Index">Stores</a></li>
-                        <li class="dropdown-show">
-                            <a>Other</a>
-                            <ul class="dropdown-nav category-list">
-                                <li><a asp-area="Admin" asp-controller="Newsletter" asp-action="Index">Newsletter</a></li>
-                            </ul>
-                        </li>
+                        <li><a asp-area="Admin" asp-controller="Contacts" asp-action="Index">Contacts</a></li>
+                        <li><a asp-area="Admin" asp-controller="Newsletter" asp-action="Index">Subscribers</a></li>
                     </ul>
                 </nav>
             </div>
             <div class="lay-right">
+                <button id="main-menu-toggler" class="text-shadow" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Menu">
+                    <span class="icon icon-menu3" aria-hidden="true"></span>
+                </button>
                 <ul id="main-controls" class="header-list links-text-shadow">
-                    <li class="d-flex align-items-center mr-3">
-                        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn header-btn">
-                            <span class="mob-icon"><span class="icon icon-exit2 icon-top-adjust" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Go to Site"></span><span class="mob-icon-text txt-md">Go to Site</span></span>
-                        </a>
-                    </li>
                     <li class="dropdown">
                         <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user" aria-hidden="true"></span></a>
                         <div class="dropdown-menu dropdown-nav" data-dd-mega data-dd-mega-start="#main-profile-menu" data-dd-close="0">
                             <ul id="main-profile-menu">
-                                <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" data-dd-close="1">Admin Panel</a></li>
+                                <li class="primary-link-all pb-2 px-2"><a asp-area="" asp-controller="Home" asp-action="Index" data-dd-close="1">Back to site</a></li>
                                 <li class="dropdown-divider m-3"></li>
                                 <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1">Account Info</a></li>
                                 <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1">Log out</a></li>
@@ -97,17 +88,11 @@
     <main id="main-content" role="main">
         @RenderBody()
     </main>
-
-    @* Main Footer *@
-    <footer id="main-footer" class="p-2">
-        <div class="container">
-            <p class="copyright border-0">&copy; @DateTime.Now.Year Recycle. All rights reserved.</p>
-        </div>
+    <footer>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+        @await RenderSectionAsync("Scripts", required: false)
     </footer>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

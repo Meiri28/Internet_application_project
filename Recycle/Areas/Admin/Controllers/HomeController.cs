@@ -40,8 +40,6 @@ namespace Recycle.Areas.Admin.Controllers
             // Gets the number of pending contacts:
             ViewData["Results_PendingContacts"] = await _dbContext.Contacts.Where(c => c.Status == ContactStatus.Pending).CountAsync();
 
-            #region Data here is related to the specified period...
-
             DateTime fromDate = this.GetDateTimeStartOfPeriod(model.Period);
 
             // Gets the number of new customers (in this period):
@@ -69,35 +67,19 @@ namespace Recycle.Areas.Admin.Controllers
             if (orders.Count > 0 && model.Period == Periods.Lifetime)
                 fromDate = orders.Last().DateCreated;
 
+
+            // Get total orders:
+            ViewData["All_Orders"] = orders.Count;
+
             // Gets the total earnings and earnings time series chart:
             double totalEarnings = 0;
-            TimeSeriesChartData earningsTS = new TimeSeriesChartData(model.Period, fromDate);
             foreach (Order order in orders)
             {
                 double orderTotal = order.GetTotalPrice();
                 totalEarnings += orderTotal;
-                earningsTS.Add(order.DateCreated, _clientCurrency.GetPrice(orderTotal));
             }
             ViewData["Results_TotalEarnings"] = _clientCurrency.GetPrice(totalEarnings);
-            ViewData["Results_EarningsTimeSeries"] = earningsTS;
-
-            // Gets the average customer spending time series chart:
-            TimeSeriesChartData avgCustomerSpendingTS = new TimeSeriesChartData(model.Period, fromDate);
-            foreach (Order order in orders)
-            {
-                avgCustomerSpendingTS.Add(order.DateCreated, _clientCurrency.GetPrice(order.GetTotalPrice()));
-            }
-            ViewData["Results_AvgCustomerSpendingTS"] = avgCustomerSpendingTS;
-
-            // Gets the average customer spending time series chart:
-            TimeSeriesChartData avgCustomerActivityTimesTS = new TimeSeriesChartData(model.Period, fromDate);
-            foreach (Order order in orders)
-            {
-                avgCustomerActivityTimesTS.Add(order.DateCreated, order.DateCreated.RoundUp(TimeSpan.FromMinutes(30)).Hour);
-            }
-            ViewData["Results_AvgCustomerActivityTimesTS"] = avgCustomerActivityTimesTS;
-
-            #endregion
+            ViewData["Results_AvgCustomerSpendingTS"] = (totalEarnings/orders.Count);
 
             return View(model);
         }
