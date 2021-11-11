@@ -1,6 +1,6 @@
 ﻿using Recycle.App_Custom.ActionFilters;
 using Recycle.App_Custom.Helpers.ViewModelHelpers;
-using Recycle.Areas.Admin.ViewModels.ProductCategories;
+using Recycle.Areas.Seller.ViewModels.ProductCategories;
 using Recycle.Data;
 using Recycle.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Recycle.Areas.Admin.Controllers
+namespace Recycle.Areas.Seller.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Seller")]
+    [Authorize(Roles = "Seller")]
     public class ProductCategoriesController : Controller
     {
         private readonly RecycleContext _dbContext;
@@ -24,7 +24,7 @@ namespace Recycle.Areas.Admin.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: /Admin/ProductCategories
+        // GET: /Seller/ProductCategories
         public async Task<IActionResult> Index(IndexVM model)
         {
             List<ProductCategory> categories = await _dbContext.ProductCategories
@@ -53,7 +53,7 @@ namespace Recycle.Areas.Admin.Controllers
             return View(model);
         }
 
-        // GET: /Admin/ProductCategories/Details/{id}
+        // GET: /Seller/ProductCategories/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             ProductCategory category = await _dbContext.ProductCategories.FirstOrDefaultAsync(c => c.Id == id);
@@ -63,13 +63,13 @@ namespace Recycle.Areas.Admin.Controllers
                 return View(category);
         }
 
-        // GET: /Admin/ProductCategories/Create
+        // GET: /Seller/ProductCategories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Admin/ProductCategories/Create
+        // POST: /Seller/ProductCategories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateVM model)
@@ -86,7 +86,7 @@ namespace Recycle.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Admin/ProductCategories/Edit/{id}
+        // GET: /Seller/ProductCategories/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
             ProductCategory category = await _dbContext.ProductCategories.FindAsync(id);
@@ -101,7 +101,7 @@ namespace Recycle.Areas.Admin.Controllers
                 });
         }
 
-        // POST: /Admin/ProductCategories/Edit/{id}
+        // POST: /Seller/ProductCategories/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditVM model)
@@ -125,7 +125,7 @@ namespace Recycle.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Admin/ProductCategories/Delete/{id}
+        // GET: /Seller/ProductCategories/Delete/{id}
         public async Task<IActionResult> Delete(int id)
         {
             ProductCategory category = await _dbContext.ProductCategories.FirstOrDefaultAsync(c => c.Id == id);
@@ -135,7 +135,7 @@ namespace Recycle.Areas.Admin.Controllers
                 return View(category);
         }
 
-        // POST: /Admin/ProductCategories/Delete/{id}
+        // POST: /Seller/ProductCategories/Delete/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
