@@ -1,6 +1,6 @@
 ﻿using Recycle.App_Custom.ActionFilters;
 using Recycle.App_Custom.Helpers.ViewModelHelpers;
-using Recycle.Areas.Admin.ViewModels.Sales;
+using Recycle.Areas.Seller.ViewModels.Sales;
 using Recycle.Data;
 using Recycle.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -11,10 +11,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Recycle.Areas.Admin.Controllers
+namespace Recycle.Areas.Seller.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Seller")]
+    [Authorize(Roles = "Seller")]
     public class SalesController : Controller
     {
         private readonly RecycleContext _dbContext;
@@ -24,7 +24,7 @@ namespace Recycle.Areas.Admin.Controllers
             _dbContext = dbContext;
         }
 
-        // GET: /Admin/Sales
+        // GET: /Seller/Sales
         public async Task<IActionResult> Index(IndexVM model)
         {
             List<Sale> sales = await _dbContext.Sales
@@ -55,7 +55,7 @@ namespace Recycle.Areas.Admin.Controllers
             return View(model);
         }
 
-        // GET: /Admin/Sales/Details/{id}
+        // GET: /Seller/Sales/Details/{id}
         public async Task<IActionResult> Details(int id)
         {
             Sale sale = await _dbContext.Sales.FirstOrDefaultAsync(s => s.Id == id);
@@ -65,13 +65,13 @@ namespace Recycle.Areas.Admin.Controllers
                 return View(sale);
         }
 
-        // GET: /Admin/Sales/Create
+        // GET: /Seller/Sales/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /Admin/Sales/Create
+        // POST: /Seller/Sales/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateVM model)
@@ -91,7 +91,7 @@ namespace Recycle.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Admin/Sales/Edit/{id}
+        // GET: /Seller/Sales/Edit/{id}
         public async Task<IActionResult> Edit(int id)
         {
             Sale sale = await _dbContext.Sales.FindAsync(id);
@@ -109,7 +109,7 @@ namespace Recycle.Areas.Admin.Controllers
                 });
         }
 
-        // POST: /Admin/Sales/Edit/{id}
+        // POST: /Seller/Sales/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, EditVM model)
@@ -136,7 +136,7 @@ namespace Recycle.Areas.Admin.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Admin/Sales/Delete/{id}
+        // GET: /Seller/Sales/Delete/{id}
         public async Task<IActionResult> Delete(int id)
         {
             Sale sale = await _dbContext.Sales.FirstOrDefaultAsync(s => s.Id == id);
@@ -146,7 +146,7 @@ namespace Recycle.Areas.Admin.Controllers
                 return View(sale);
         }
 
-        // POST: /Admin/Sales/Delete/{id}
+        // POST: /Seller/Sales/Delete/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]

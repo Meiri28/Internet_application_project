@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Recycle.Areas.Admin.ViewModels.ProductCategories
+namespace Recycle.Areas.Seller.ViewModels.ProductCategories
 {
     public class IndexVM
     {

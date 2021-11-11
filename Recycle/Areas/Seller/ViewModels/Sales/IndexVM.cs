@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Recycle.App_Custom.Validations;
 
-namespace Recycle.Areas.Admin.ViewModels.Sales
+namespace Recycle.Areas.Seller.ViewModels.Sales
 {
     public class IndexVM
     {

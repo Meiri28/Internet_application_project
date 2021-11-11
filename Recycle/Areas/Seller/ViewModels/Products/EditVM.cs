@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Recycle.Areas.Admin.ViewModels.Products
+namespace Recycle.Areas.Seller.ViewModels.Products
 {
     public class EditVM : CreateVM
     {
@@ -25,7 +25,7 @@ namespace Recycle.Areas.Admin.ViewModels.Products
         [Display(Name = "Name *")]
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, ErrorMessage = "Maximum length allowed is 50 characters.")]
-        [Remote("CheckNameEditAvailability", "Products", "Admin", AdditionalFields = nameof(CurrentName), ErrorMessage = "Name already taken.")]
+        [Remote("CheckNameEditAvailability", "Products", "Seller", AdditionalFields = nameof(CurrentName), ErrorMessage = "Name already taken.")]
         public new string Name { get; set; }
 
         /// <summary>

@@ -1,7 +1,7 @@
 ﻿using Recycle.App_Custom.Helpers.Objects;
 using Recycle.App_Custom.Helpers.ViewModelHelpers;
 using Recycle.App_Custom.Services.ClientCurrency;
-using Recycle.Areas.Admin.ViewModels.Home;
+using Recycle.Areas.Seller.ViewModels.Home;
 using Recycle.Data;
 using Recycle.Models;
 using Recycle.Models.Helpers;
@@ -15,10 +15,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Recycle;
 
-namespace Recycle.Areas.Admin.Controllers
+namespace Recycle.Areas.Seller.Controllers
 {
-    [Area("Admin")]
-    [Authorize(Roles = "Admin")]
+    [Area("Seller")]
+    [Authorize(Roles = "Seller")]
     public class HomeController : Controller
     {
         private readonly RecycleContext _dbContext;
