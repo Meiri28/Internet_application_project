@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using System.Security.Principal;
+using System;
 
 namespace Recycle
 {
@@ -41,6 +42,17 @@ namespace Recycle
                 return claim.Value;
             }
             return null;
+        }
+
+        public static string GetName(this IIdentity identity)
+        {
+            if (identity.IsAuthenticated)
+            {
+                ClaimsIdentity claims = (identity as ClaimsIdentity);
+                Console.WriteLine(claims.Name);
+                return claims.Name;
+            }
+            return "User";
         }
 
     }

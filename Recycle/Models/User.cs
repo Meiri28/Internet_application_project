@@ -134,6 +134,8 @@ namespace Recycle.Models
         /// <remarks>[Relationship: One-to-Many]</remarks>
         public List<Order> Orders { get; set; }
 
+        public string getUserName() { return FirstName + " " + LastName; }
+
         #endregion
 
     }
