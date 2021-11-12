@@ -76,6 +76,10 @@ namespace Recycle.Models
         #region Relationships
 
         /// <summary>
+        /// The Store who sale the product.
+        /// </summary>
+        public Store Store { get; set; }
+        /// <summary>
         /// The category id of the product.
         /// </summary>
         /// <remarks>[Foreign Key]</remarks>
@@ -92,6 +96,7 @@ namespace Recycle.Models
         /// </summary>
         /// <remarks>[Foreign Key]</remarks>
         public int TypeId { get; set; }
+
 
         /// <summary>
         /// The type of the product.
