@@ -1,66 +1,150 @@
-﻿using DataAnnotationsExtensions;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+
 namespace Recycle.Models
 {
+    /// <summary>
+    /// Represents a product.
+    /// </summary>
+    [Index(nameof(Name), IsUnique = true)]
+    [Index(nameof(CategoryId), nameof(TypeId), nameof(Id))]
     public class Product
     {
+
+        /// <summary>
+        /// The id of the product.
+        /// </summary>
+        /// <remarks>[Primary Key], [Identity]</remarks>
         [Key]
-        [Required]
         public int Id { get; set; }
 
+        /// <summary>
+        /// The name of the product.
+        /// </summary>
+        /// <remarks>[Unique]</remarks>
+        [Display(Name = "Name")]
         [Required]
-        [Display(Name = "Store ID")]
-        public int StoreId { get; set; }
-        public Store Store{ get; set; }
+        [StringLength(50)]
+        public string Name { get; set; }
 
+        /// <summary>
+        /// The description of the product.
+        /// </summary>
+        [Display(Name = "Description")]
         [Required]
-        public string ItemName { get; set; }
+        [StringLength(500)]
+        [DataType(DataType.MultilineText)]
+        public string Description { get; set; }
 
+        /// <summary>
+        /// The path to the image of the product.
+        /// </summary>
+        [Display(Name = "Image")]
         [Required]
-        public string ItemDesc { get; set; }
+        [DataType(DataType.ImageUrl)]
+        public string ImagePath { get; set; }
 
+        /// <summary>
+        /// The price for unit of the product.
+        /// </summary>
+        [Display(Name = "Price")]
         [Required]
-        public string Size { get; set; }
+        [Range(0, 100000)]
+        [DataType(DataType.Currency)]
+        public double Price { get; set; }
 
-        [Required]
-        public uint Amount { get; set; }
+        /// <summary>
+        /// Indicator if the product is available or not.
+        /// </summary>
+        [Display(Name = "Is Available")]
+        public bool IsAvailable { get; set; }
 
-        [Required]
-        public uint Price { get; set; }
+        /// <summary>
+        /// Date and time the product was added.
+        /// </summary>
+        [Display(Name = "Date Added")]
+        public DateTime DateAdded { get; set; }
 
-        [Required]
-        public string Color { get; set; }
+        /// <summary>
+        /// Date and time of the last modify on the record.
+        /// </summary>
+        [Display(Name = "Date Last Modified")]
+        public DateTime DateLastModified { get; set; }
 
-        public byte[] Video { get; set; }
+        #region Relationships
 
-        [NotMapped]
-        public IFormFile VideoFile { get; set; }
+        /// <summary>
+        /// The Store who sale the product.
+        /// </summary>
+        public Store Store { get; set; }
+        /// <summary>
+        /// The category id of the product.
+        /// </summary>
+        /// <remarks>[Foreign Key]</remarks>
+        public int CategoryId { get; set; }
 
-        [Required]
-        [Display(Name = "Is Product Active?")]
-        public bool IsActive { get; set; }
+        /// <summary>
+        /// The category of the product.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-One]</remarks>
+        public ProductCategory Category { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        /// <summary>
+        /// The type id of the product.
+        /// </summary>
+        /// <remarks>[Foreign Key]</remarks>
+        public int TypeId { get; set; }
 
-        public DateTime UpdatedAt { get; set; }
 
+        /// <summary>
+        /// The type of the product.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-One]</remarks>
+        public ProductType Type { get; set; }
 
-        // Tables relationship
-        public List<ProductComment> comments { get; set; }
+        /// <summary>
+        /// The current sale id on the product.
+        /// </summary>
+        /// <remarks>[Foreign Key]</remarks>
+        public int? SaleId { get; set; }
 
-        public List<ProductImage> Pictures { get; set; }
+        /// <summary>
+        /// The current sale on the product.
+        /// </summary>
+        /// <remarks>[Relationship: One-to-One]</remarks>
+        public Sale Sale { get; set; }
 
-        [NotMapped]
-        public List<IFormFile> PictursFiles { get; set; }
+        /// <summary>
+        /// The list of orders related to the product.
+        /// </summary>
+        /// <remarks>[Relationship: Many-to-Many]</remarks>
+        public List<OrderVsProduct> OrderProducts { get; set; }
 
-        public List<Transaction> Transactions { get; set; }
+        #endregion
 
-        public List<Hashtag> Hashtags { get; set; }
+        #region Public API
+
+        /// <summary>
+        /// Checks whther the product is currently on sale or not.
+        /// </summary>
+        /// <returns>Returns true if the product is currently on sale, otherwise false.</returns>
+        public bool IsOnSaleNow()
+        {
+            return (this.Sale != null && this.Sale.DateStart < DateTime.Now && (this.Sale.DateEnd == null || DateTime.Now < this.Sale.DateEnd));
+        }
+
+        /// <summary>
+        /// Gets the actual price of the product, after calculation of sale discount (if exists).
+        /// </summary>
+        /// <returns>Returns the actual price of the product, after calculation of sale discount (if exists).</returns>
+        public double ActualPrice()
+        {
+            return (this.IsOnSaleNow() ? (this.Price * (1 - this.Sale.DiscountRate)) : this.Price);
+        }
+
+        #endregion
+
     }
 }

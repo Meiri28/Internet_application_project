@@ -1,0 +1,205 @@
+﻿@inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
+@inject Recycle.App_Custom.Services.ClientShoppingCart.ClientShoppingCartService ClientCart
+
+@{
+    ViewData["Title"] = "View Cart";
+
+    string cartJSON = (ClientCart.IsEmpty() ? "[]" : Json.Serialize(ClientCart.Cart.Products.Select(p => new
+    {
+        ProductId = p.ProductId,
+        Quantity = p.Quantity
+    })).ToString());
+}
+
+<section class="bg-light-2">
+    <div class="sec-container">
+        <div class="maxw-2xl m-auto py-5-desktop">
+            <h1 class="title-1 font-weight-bold mb-5">Shopping Cart</h1>
+            <div class="row">
+                <div class="col-xl-8 mb-5">
+                    <h3 class="block-title">Items (@ClientCart.Count())</h3>
+                    <div class="form-container bg-white txt-md">
+                        <div class="table-header text-center d-none d-md-block">
+                            <div class="row">
+                                <div class="col-md-5">Item</div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="col-md-3">Price</div>
+                                        <div class="col-md-4">Quantity</div>
+                                        <div class="col-md-3">Total</div>
+                                        <div class="col-md-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-body">
+                            @if (!ClientCart.IsEmpty())
+                            {
+                                foreach (var cartProduct in ClientCart.Cart.Products)
+                                {
+                                    <div class="table-row">
+                                        <div class="d-flex align-items-center text-left text-md-center row">
+                                            <div class="col-12 col-md-5">
+                                                <form asp-area="Shop" asp-controller="Cart" asp-action="RemoveProduct" asp-route-productid="@cartProduct.ProductId">
+                                                    <button type="submit" class="txt-lg float-right d-md-none mt-3 ml-3"><span class="icon icon-remove1" aria-hidden="true"></span></button>
+                                                </form>
+                                                <div class="d-flex align-items-center">
+                                                    <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@cartProduct.Product.Id">
+                                                        <img class="row-image" src="@cartProduct.Product.ImagePath" alt="@cartProduct.Product.Name" />
+                                                    </a>
+                                                    <div class="row-title text-left">
+                                                        <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@cartProduct.Product.Id" class="primary-link">@cartProduct.Product.Name</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="mt-4 mt-md-0 col-12 col-md-7">
+                                                <div class="row align-items-center">
+                                                    <div class="col-md-3">
+                                                        <div class="d-flex justify-content-md-center justify-content-between">
+                                                            <div class="d-md-none txt-secondary">Price</div>
+                                                            <div class="text-right text-md-center">
+                                                                @if (cartProduct.Product.IsOnSaleNow())
+                                                                {
+                                                                    <strike>@ClientCurrency.GetPriceAndDisplay(cartProduct.Product.Price)</strike>
+                                                                    <br class="d-none d-md-block" />
+                                                                }
+                                                                <span class="@(cartProduct.Product.IsOnSaleNow() ? "txt-accent" : "") ml-2 ml-md-0">@ClientCurrency.GetPriceAndDisplay(cartProduct.Product.ActualPrice())</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="d-flex justify-content-md-center justify-content-between align-items-center">
+                                                            <div class="d-md-none txt-secondary">Quantity</div>
+                                                            <div data-in-num data-in-num-min="1" data-in-num-max="10" class="d-flex justify-content-center align-items-center">
+                                                                <button type="button" class="primary-link p-3 mr-1" data-in-num-dec>-</button>
+                                                                <input data-quantity-for="@cartProduct.Product.Id" type="text" class="i-txt text-center maxw-6 p-0 py-md-3 m-0" value="@cartProduct.Quantity" />
+                                                                <button type="button" class="primary-link py-3 pl-3 pr-md-3 ml-1" data-in-num-inc>+</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="d-flex justify-content-md-center justify-content-between">
+                                                            <div class="d-md-none txt-secondary">Total Price</div>
+                                                            <div data-product-total class="text-right text-md-center">@ClientCurrency.GetPriceAndDisplay((cartProduct.Quantity * cartProduct.Product.ActualPrice()))</div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-none d-md-block text-center col-2">
+                                                        <form asp-area="Shop" asp-controller="Cart" asp-action="RemoveProduct" asp-route-productid="@cartProduct.ProductId">
+                                                            <button type="submit" class="txt-lg"><span class="icon icon-remove1" aria-hidden="true"></span></button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <h4 class="txt-lg text-center txt-secondary py-5 mt-md-5">Your cart is empty.</h4>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-md-7 col-sm-8 pl-xl-5 m-auto m-xl-0">
+                    <h3 class="block-title">Order Summary</h3>
+                    <div class="form-container bg-white mb-5">
+                        <ul class="list-unstyled mb-3">
+                            <li class="summary-item"><span>Order Subtotal </span><span id="cart-subtotal">@ClientCurrency.GetPriceAndDisplay(ClientCart.GetSubtotal())</span></li>
+                            <li class="summary-item"><span>Discount</span><span id="cart-discount">-@ClientCurrency.GetPriceAndDisplay(ClientCart.GetTotalDiscount())</span></li>
+                            <li class="summary-item border-0"><span>Total</span><strong class="order-summary-total" id="cart-total">@ClientCurrency.GetPriceAndDisplay(ClientCart.GetTotalPrice())</strong></li>
+                        </ul>
+                        <div>
+                            <form asp-area="Shop" asp-controller="Cart" asp-action="ProceedToCheckout" method="post">
+                                <input type="hidden" name="cartJson" id="cartJson" value="@cartJSON" />
+                                @if (ClientCart.IsEmpty())
+                                {
+                                    <div data-toggle="popover" data-placement="top" data-content="Your cart is empty. Add some products to proceed.">
+                                        <button type="submit" class="btn btn-primary w-100 hover-push disabled" disabled>
+                                            <span>Proceed to Checkout</span><span class="icon icon-arrow-right4 icon-top-adjust ml-3" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <button type="submit" class="btn btn-primary w-100 hover-push">
+                                        <span>Proceed to Checkout</span><span class="icon icon-arrow-right4 icon-top-adjust ml-3" aria-hidden="true"></span>
+                                    </button>
+                                }
+                            </form>
+                            <hr class="sec-separator my-4">
+                            <a asp-area="Shop" asp-controller="Home" asp-action="Index" class="btn primary-link w-100 hover-push">
+                                <span class="icon icon-arrow-left3 icon-top-adjust pr-3" aria-hidden="true"></span>
+                                <span>@(ClientCart.IsEmpty() ? "Start Shopping" : "Continue Shopping")</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        $(function () {
+            $('[data-quantity-for]').change(function () {
+                // Getting the elements to work with:
+                let $cartJsonInput = $('#cartJson');
+                let $container = $(this).parents('.table-row');
+
+                // Getting the data to work with:
+                let productId = parseInt($(this).attr('data-quantity-for'));
+                let productQuantity = parseInt($(this).val());
+                let productInCart = ArrayHelper.getObjectByKey(clientCart, 'id', productId);
+
+                if (productInCart) {
+                    // Updates the value in the cart JSON:
+                    let cartJson = JSON.parse($cartJsonInput.val());
+                    (ArrayHelper.getObjectByKey(cartJson, 'productId', productId)).quantity = productQuantity;
+                    $cartJsonInput.val(JSON.stringify(cartJson));
+
+                    // Updates the local clientCart variable:
+                    (ArrayHelper.getObjectByKey(clientCart, 'id', productId)).quantity = productQuantity;
+
+                    // Updates the product's total price:
+                    let productTotalPrice = (parseFloat(productInCart.actualPrice.substring(1)) * productQuantity);
+                    $container.find('[data-product-total]').text(productInCart.actualPrice.charAt(0) + productTotalPrice.toFixed(2));
+
+                    // Updates the order summary:
+                    let symbol = productInCart.actualPrice.charAt(0);
+                    $('#cart-subtotal').text(symbol + getCartSubTotal(clientCart).toFixed(2));
+                    $('#cart-discount').text("-" + symbol + getCartDiscount(clientCart).toFixed(2));
+                    $('#cart-total').text(symbol + getCartTotal(clientCart).toFixed(2));
+                }
+            });
+        });
+        function getCartSubTotal(products) {
+            let subtotal = 0;
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].regularPrice) {
+                    subtotal += (parseFloat(products[i].regularPrice.substring(1)) * products[i].quantity);
+                } else {
+                    subtotal += (parseFloat(products[i].actualPrice.substring(1)) * products[i].quantity);
+                }
+            }
+            return subtotal;
+        }
+        function getCartDiscount(products) {
+            let discount = 0;
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].regularPrice) {
+                    discount += ((parseFloat(products[i].regularPrice.substring(1)) - parseFloat(products[i].actualPrice.substring(1))) * products[i].quantity);
+                }
+            }
+            return discount;
+        }
+        function getCartTotal(products) {
+            let total = 0;
+            for (let i = 0; i < products.length; i++) {
+                total += (parseFloat(products[i].actualPrice.substring(1)) * products[i].quantity);
+            }
+            return total;
+        }
+    </script>
+}

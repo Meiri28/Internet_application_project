@@ -1,0 +1,128 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@model List<Store>
+
+@{
+    ViewData["Title"] = "Stores";
+}
+
+<section class="bg-light-2">
+    <div class="sec-container">
+        <div class="maxw-2xl m-auto py-5-desktop">
+            <h1 class="title-1 font-weight-bold mb-5">Our Stores</h1>
+            <div class="row">
+                <div class="col-xl-8 mb-5">
+                    <div class="form-container bg-white" id="stores-list">
+                        <div class="table-body">
+                            @for (int i = 0; i < Model.Count; i++)
+                            {
+                                <div class="table-row">
+                                    <h3 class="txt-lg mb-4">@Model[i].Name</h3>
+                                    <div class="row txt-md">
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-7 col-md-12">
+                                                    <h4>Address</h4>
+                                                    <p><a href="#" class="text-link" data-show-map="@i">@Model[i].Address</a></p>
+                                                </div>
+                                                <div class="col-5 col-md-12">
+                                                    <h4>Phone</h4>
+                                                    <p><a href="tel:@Model[i].PhoneNumber" class="text-link">@Model[i].PhoneNumber</a></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <h4>Opening Hours</h4>
+                                            <p class="pre-line">@Model[i].OpeningHours</p>
+                                        </div>
+                                        <div class="col-md-4 d-flex justify-content-end align-items-center px-5">
+                                            <button type="button" data-show-map="@i" class="btn btn-sm txt-md outline-primary text-nowrap mt-4 mt-md-0">Show in Map<span class="icon icon-arrow-right4 icon-top-adjust ml-3"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-4 pl-xl-5 mb-0 mb-xl-5">
+                    <div class="form-container bg-white p-0" id="stores-map">
+                        <div id="map-container"></div>
+                        <div id="map-loader" class="overlap-container d-flex-center">
+                            <div class="spinner-border spinner-lg" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script>
+        var _StoresData = @Html.Raw(Json.Serialize(Model.Select(b => new { name = b.Name, latitude = b.LocationLatitude, longitude = b.LocationLongitude })));
+        var _map;
+        var _infoWindow;
+        var _markers;
+
+        function initStoresMap() {
+            _map = new google.maps.Map(document.getElementById("map-container"), {
+                zoom: 8,
+                center: { lat: _StoresData[0].latitude, lng: _StoresData[0].longitude }
+            });
+
+            _infoWindow = new google.maps.InfoWindow();
+
+            // Adds the markers of Stores locations:
+            _markers = [];
+            for (var i = 0; i < _StoresData.length; i++) {
+                _markers.push(new google.maps.Marker({
+                    position: { lat: _StoresData[i].latitude, lng: _StoresData[i].longitude },
+                    title: _StoresData[i].name,
+                    map: _map
+                }));
+                _markers[i].addListener("click", () =>
+                {
+                    showInfoWindow(_markers[i]);
+                });
+            }
+
+            // Hides the loader:
+            document.getElementById('map-loader').style.display = "none";
+        }
+
+        function showInfoWindow(marker) {
+            _infoWindow.close();
+            _infoWindow.setContent(marker.getTitle());
+            _infoWindow.open(marker.getMap(), marker);
+        }
+
+        $(function () {
+            $('[data-show-map]').click(function () {
+                // Activates the button selection:
+                $(this).parents('#stores-list').find('[data-show-map]').each(function () {
+                    $(this).removeClass('active');
+                });
+                $(this).addClass('active');
+
+                // Navigates to the location in the map:
+                var marker = _markers[parseInt($(this).attr('data-show-map'))];
+                _map.panTo(marker.getPosition());
+                showInfoWindow(marker);
+                _map.setZoom(15);
+
+                // Scrolls down to the map container if needed:
+                var $storesMap = $('#stores-map');
+                var currentViewBottom = ($(window).scrollTop() + $(window).outerHeight());
+                var mapBottom = ($storesMap.offset().top + $storesMap.outerHeight());
+                if (mapBottom > currentViewBottom) {
+                    $('html, body').stop().animate({
+                        'scrollTop': ($storesMap.offset().top - $('#main-header').outerHeight() - (5 * 10))
+                    }, 500, 'swing');
+                }
+            });
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration.GetSection("UserSecrets").GetSection("WebServicesCredentials")["MapsJavascriptAPI"]&callback=initStoresMap&language=en" async></script>
+}

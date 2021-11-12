@@ -1,0 +1,105 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
+
+<!DOCTYPE html>
+<html lang="en" theme="default">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | Seller | Recycle</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/fonts.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
+</head>
+<body>
+    @* Main Header *@
+    <header id="main-header" class="fixed-top">
+        <div class="lay-wrapper">
+            <div class="lay-left">
+                <h1 id="main-Seller-logo">
+                    <a asp-area="Seller" asp-controller="Home" asp-action="Index">
+                        <span class="logo"></span>
+                        <span>| Seller</span>
+                    </a>
+                </h1>
+                <button id="main-menu-toggler" class="text-shadow" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Menu">
+                    <span class="icon icon-menu3" aria-hidden="true"></span>
+                </button>
+            </div>
+            <div class="lay-middle">
+                <nav id="main-menu">
+                    <ul class="header-list links-text-shadow">
+                        <li><a asp-area="Seller" asp-controller="Orders" asp-action="Index">Orders</a></li>
+                        <li><a asp-area="Seller" asp-controller="Contacts" asp-action="Index">Contacts</a></li>
+                        <li class="dropdown-show">
+                            <a>Shop</a>
+                            <ul class="dropdown-nav category-list">
+                                <li><a asp-area="Seller" asp-controller="Products" asp-action="Index">Products</a></li>
+                                <li><a asp-area="Seller" asp-controller="Sales" asp-action="Index">Sales</a></li>
+                                <li><a asp-area="Seller" asp-controller="ProductCategories" asp-action="Index">Product Categories</a></li>
+                                <li><a asp-area="Seller" asp-controller="ProductTypes" asp-action="Index">Product Types</a></li>
+                                <li><a asp-area="Seller" asp-controller="DeliveryMethods" asp-action="Index">Delivery Methods</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="lay-right">
+                <ul id="main-controls" class="header-list links-text-shadow">
+                    <li class="d-flex align-items-center mr-3">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="btn header-btn">
+                            <span class="mob-icon"><span class="icon icon-exit2 icon-top-adjust" aria-hidden="true" data-toggle="tooltip" data-placement="bottom" title="Go to Site"></span><span class="mob-icon-text txt-md">Go to Site</span></span>
+                        </a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-user" aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-nav" data-dd-mega data-dd-mega-start="#main-profile-menu" data-dd-close="0">
+                            <ul id="main-profile-menu">
+                                <li class="primary-link-all pb-2 px-2"><a asp-area="Seller" asp-controller="Home" asp-action="Index" data-dd-close="1">Seller Panel</a></li>
+                                <li class="dropdown-divider m-3"></li>
+                                <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1">Account Info</a></li>
+                                <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1">Log out</a></li>
+                                <li class="dropdown-divider m-3"></li>
+                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu">Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
+                            </ul>
+                            <ul id="main-currency-menu" data-currency-set-link="@Url.Action("UpdateClientCurrency", "Preferences", new { area = "" })">
+                                <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Currency</span></li>
+                                @foreach (var currency in ClientCurrency.Options.SupportedCurrencies)
+                                {
+                                    <li>
+                                        <a href="#" role="button" data-currency-set="@currency.Code" data-currency-set-symbol="@currency.Symbol" class="d-flex justify-content-between align-items-center">
+                                            <span class="line-height-2">@currency.ToString()</span>
+                                            @if (currency == ClientCurrency.Currency)
+                                            {
+                                                <span data-dd-check class="float-right m-0 txt-accent icon icon-checkmark2" aria-hidden="true"></span>
+                                            }
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    @* Content *@
+    <main id="main-content" role="main">
+        @RenderBody()
+    </main>
+
+    @* Main Footer *@
+    <footer id="main-footer" class="p-2">
+        <div class="container">
+            <p class="copyright border-0">&copy; @DateTime.Now.Year Recycle. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

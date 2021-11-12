@@ -1,0 +1,22 @@
+﻿@model Recycle.Areas.Shop.ViewModels.Order.CheckoutVM.ConditionalLoginVM
+
+<div class="single-form-item">
+    <input asp-for="EmailAddress" class="i-txt bg-input-txt" />
+    <span asp-validation-for="EmailAddress" class="text-danger"></span>
+</div>
+<div class="single-form-item">
+    <input asp-for="Password" class="i-txt bg-input-txt" autocomplete="off" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+</div>
+<div class="single-form-item txt-md my-5">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" asp-for="RememberMe" class="custom-control-input" />
+            <label asp-for="RememberMe" class="custom-control-label txt-primary"></label>
+        </div>
+    </div>
+</div>
+@if (ViewData["Error_Login"] != null)
+{
+    <div class="validation-summary-errors">@ViewData["Error_Login"]</div>
+}

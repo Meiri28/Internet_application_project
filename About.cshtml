@@ -1,0 +1,112 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+
+@{
+    ViewData["Title"] = "About";
+}
+
+<section class="bg-light-2">
+    <div class="sec-container">
+        <div class="container py-5-desktop">
+            <div class="row">
+                <div class="col-xl-2">
+                    <div class="horizontal-line d-none d-xl-block"></div>
+                </div>
+                <div class="col-xl-10">
+                    <h3 class="txt-accent text-uppercase mb-3">About Us</h3>
+                    <h1 class="title-1 font-weight-bold mb-5">We are Recycle!</h1>
+                    <p class="paragraph-1">
+                        Recycle is an Israeli website that advertises products for buying and selling second-hand products, all with the aim of minimizing environmental damage in the world.
+                        The site was developed by a number of smart students as part of a project at the College of Management and has become the hottest thing in the Israeli consumer market..
+                    </p>
+                    <p class="paragraph-1 mb-5">This site is a final project in Web Application Development course,created by four students of the School of Computer Science.</p>
+                    <h3 class="line-height-1-5 mb-5">You can find our Git project in <a href="@Configuration.GetSection("Metadata")["GitProjectLink"]" target="_blank">this link</a>.</h3>
+                    <img src="~/images/about-team-photo.png" alt="Team Photo" class="about-team-photo my-5" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="bg-light-3">
+    <div class="sec-container">
+        <div class="container py-5-desktop">
+            <div class="row">
+                <div class="col-xl-2">
+                    <div class="horizontal-line d-none d-xl-block"></div>
+                </div>
+                <div class="col-xl-09">
+                    <h3 class="txt-accent text-uppercase mb-5">From The Newspaper</h3>
+                    <div class="newspaper">
+                        <div class="paper-cut-top"></div>
+                        <div class="paper-cut-bottom"></div>
+                        <div class="newspaper-content">
+                            <h2 class="text-uppercase text-center mb-5">Recycle: The Best site to improve your living environment and our future</h2>
+                            <div class="multi-col txt-md">
+                                Join Recycle fight today and become smart consumers.We're already there and what abuot you?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="students" class="bg-light-2">
+    <div class="sec-container">
+        <div class="container py-5-desktop">
+            <div class="row">
+                <div class="col-xl-2">
+                    <div class="horizontal-line d-none d-xl-block"></div>
+                </div>
+                <div class="col-xl-10">
+                    <h3 class="txt-accent text-uppercase mb-3">The Team</h3>
+                    <h1 class="title-1 font-weight-bold mb-5">Students</h1>
+                    <div class="people-list">
+                        <div class="person">
+                            <a href="#" target="_blank">
+                                <h4>Andrey</h4>
+                            </a>
+                            <ul class="text-muted person-links">
+                                <li><a href="#" target="_blank" class="primary-link mb-1"><span class="icon icon-linkedin icon-top-adjust mr-3" aria-hidden="true"></span>LinkedIn</a></li>
+                                <li><a href="#" target="_blank" class="primary-link"><span class="icon icon-github2 icon-top-adjust mr-3" aria-hidden="true"></span>GitHub</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="person">
+                            <a href="#" target="_blank">
+                                <h4>Jonathan</h4>
+                            </a>
+                            <ul class="text-muted person-links">
+                                <li><a href="#" target="_blank" class="primary-link mb-1"><span class="icon icon-linkedin icon-top-adjust mr-3" aria-hidden="true"></span>LinkedIn</a></li>
+                                <li><a href="#" target="_blank" class="primary-link"><span class="icon icon-github2 icon-top-adjust mr-3" aria-hidden="true"></span>GitHub</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="person">
+                            <a href="#" target="_blank">
+                                <h4>Yotam</h4>
+                            </a>
+                            <ul class="text-muted person-links">
+                                <li><a href="#" target="_blank" class="primary-link mb-1"><span class="icon icon-linkedin icon-top-adjust mr-3" aria-hidden="true"></span>LinkedIn</a></li>
+                                <li><a href="#" target="_blank" class="primary-link"><span class="icon icon-github2 icon-top-adjust mr-3" aria-hidden="true"></span>GitHub</a></li>
+                            </ul>
+                        </div>
+
+
+                        <div class="person">
+                            <a href="#" target="_blank">
+                                <h4>Eden</h4>
+                            </a>
+                            <ul class="text-muted person-links">
+                                <li><a href="#" target="_blank" class="primary-link mb-1"><span class="icon icon-linkedin icon-top-adjust mr-3" aria-hidden="true"></span>LinkedIn</a></li>
+                                <li><a href="#" target="_blank" class="primary-link"><span class="icon icon-github2 icon-top-adjust mr-3" aria-hidden="true"></span>GitHub</a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
