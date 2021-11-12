@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Recycle.Data;
 
 namespace Recycle.Migrations
 {
     [DbContext(typeof(RecycleContext))]
-    partial class RecycleContextModelSnapshot : ModelSnapshot
+    [Migration("20211112092716_prod_store_user_relation")]
+    partial class prod_store_user_relation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

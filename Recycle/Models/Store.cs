@@ -72,5 +72,12 @@ namespace Recycle.Models
         [Display(Name = "Date Last Modified")]
         public DateTime DateLastModified { get; set; }
 
+        #region Relationships
+        /// <summary>
+        /// User who owns the store
+        /// </summary>
+        public User User { get; set; }
+        #endregion
+
     }
 }
