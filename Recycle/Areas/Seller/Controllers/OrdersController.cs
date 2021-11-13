@@ -31,7 +31,7 @@ namespace Recycle.Areas.Seller.Controllers
             if (userId == null)
                 return NotFound();
 
-            List<Order> orders = await _orders.Search(model.Status, model.DateCreated, model.OrderId);
+            List<Order> orders = await _orders.Search(model.Status, model.DateCreated, model.OrderId, (int)userId);
 
             #region Pagination...
 

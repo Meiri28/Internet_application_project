@@ -53,3 +53,9 @@ git rm -r --cached Recycle/obj
 
 
 icons from -> https://icomoon.io/app/#/select
+
+currency -> currency freaks API
+Maps -> Google Maps API
+
+
+
