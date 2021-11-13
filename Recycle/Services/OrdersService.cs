@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 
 namespace Recycle.Services
 {
@@ -35,7 +36,6 @@ namespace Recycle.Services
                 .Include(o => o.OrderProducts).ThenInclude(op => op.Product)
                 .FirstOrDefaultAsync(o => o.Id == orderId);
         }
-
         /// <summary>
         /// Gets all the orders created from the specified date and time.
         /// </summary>
@@ -63,6 +63,11 @@ namespace Recycle.Services
             if (!string.IsNullOrEmpty(orderId))
             {
                 orderId = orderId.TrimStart('#');
+            }
+
+            if (userId != 0) {
+                var commandSql = _dbContext.Orders.FromSqlRaw("SELECT Orders.* FROM Orders WHERE id in (SELECT Orders.id FROM Orders inner join OrdersVsProducts on Orders.Id = OrdersVsProducts.OrderId inner join Products on OrdersVsProducts.ProductId = Products.Id where Products.StoreId = (Select Id from Stores where Stores.UserId = '"+ userId + "') Group By Orders.id )").ToList();
+                return commandSql;
             }
 
             return await _dbContext.Orders
