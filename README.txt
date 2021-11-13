@@ -27,6 +27,18 @@ port - 1433
 user - sa
 pass - MyPass@word
 
+after creating docker container run - 
+```CREATE DATABASE DB_website```
+
+
+After this we need to install 
+
+.net core CLI  - https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=dotnet-core-cli
+
+Create migration - dotnet ef migrations add InitialCreate
+Create schema - dotnet ef database update
+Revert migration - dotnet ef migrations remove
+
 
 
 git ignore -
@@ -36,3 +48,14 @@ Recycle/obj/
 
 then run - 
 git rm -r --cached Recycle/obj
+
+
+
+
+icons from -> https://icomoon.io/app/#/select
+
+currency -> currency freaks API
+Maps -> Google Maps API
+
+
+

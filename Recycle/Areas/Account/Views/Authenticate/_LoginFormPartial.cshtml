@@ -1,0 +1,25 @@
+﻿@model Recycle.Areas.Account.ViewModels.Authenticate.LoginVM
+
+<div class="single-form-item">
+    <input asp-for="EmailAddress" class="i-txt bg-input-txt" />
+    <span asp-validation-for="EmailAddress" class="text-danger"></span>
+</div>
+<div class="single-form-item">
+    <input asp-for="Password" class="i-txt bg-input-txt" autocomplete="off" />
+    <span asp-validation-for="Password" class="text-danger"></span>
+</div>
+<div class="single-form-item txt-md my-5">
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox" asp-for="RememberMe" class="custom-control-input" />
+            <label asp-for="RememberMe" class="custom-control-label txt-primary"></label>
+        </div>
+    </div>
+</div>
+@if (ViewData["ErrorMessage"] != null)
+{
+    <div class="validation-summary-errors txt-md">@ViewData["ErrorMessage"]</div>
+}
+<div class="single-form-item text-center">
+    <button type="submit" class="btn outline-primary w-100">Login</button>
+</div>

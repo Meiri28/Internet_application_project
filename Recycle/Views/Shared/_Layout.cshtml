@@ -1,77 +1,233 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Recycle.Areas.Account.ViewModels.Newsletter
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
+@inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
+@inject Recycle.App_Custom.Services.ClientShoppingCart.ClientShoppingCartService ClientCart
+
+<!DOCTYPE html>
+<html lang="en" theme="default">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Recycle</title>
+    <title>@ViewData["Title"] | Recycle</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/fonts.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Recycle</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    @* Main Header *@
+    <header id="main-header" class="fixed-top">
+        <div class="lay-wrapper">
+            <div class="lay-left">
+                <h1 id="main-logo">
+                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                </h1>
+                <button id="main-menu-toggler" class="text-shadow" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Menu">
+                    <span class="icon icon-menu3" aria-hidden="true"></span>
                 </button>
-                <a class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1 col-4">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-
-                        @{
-                            if (Context != null && Context.User != null && Context.User.Identity.Name != null)
-                            {
-                                if (Context.User.IsInRole("Buyer"))
+            </div>
+            <div class="lay-middle">
+                <nav id="main-menu">
+                    <ul class="header-list links-text-shadow">
+                        <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                        <li><a asp-area="Shop" asp-controller="Home" asp-action="Index">Products</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Stores">Stores</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="lay-right">
+                <ul id="main-controls" class="header-list links-text-shadow">
+                    <li>
+                        <a href="#" id="main-search-open" role="button"><span class="icon icon-search" aria-hidden="true"></span></a>
+                        <div id="main-search">
+                            <partial name="~/Views/Shared/PartialViews/_MainSearchPartial.cshtml" />
+                        </div>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon @(Context.User.Identity.IsAuthenticated ? "icon-user" : "icon-user-plus")" aria-hidden="true"></span></a>
+                        <div class="dropdown-menu dropdown-nav" data-dd-mega data-dd-mega-start="#main-profile-menu" data-dd-close="0">
+                            <ul id="main-profile-menu">
+                                @if (Context.User.Identity.IsAuthenticated && Context.User.Identity.GetRole().Equals("Admin"))
                                 {
-                                    <a class="nav-link text-dark" asp-controller="Stores" asp-action="Create">Create Store</a>
+                                    <li class="primary-link-all pb-2 px-2"><a asp-area="Admin" asp-controller="Home" asp-action="Index" data-dd-close="1">Admin Panel</a></li>
+                                    <li class="dropdown-divider m-3"></li>
+                                }
+                                @if (Context.User.Identity.IsAuthenticated && Context.User.Identity.GetRole().Equals("Seller"))
+                                {
+                                    <li class="primary-link-all pb-2 px-2"><a asp-area="Seller" asp-controller="Home" asp-action="Index" data-dd-close="1">Seller Panel</a></li>
+                                    <li class="dropdown-divider m-3"></li>
+                                }
+                                @if (Context.User.Identity.IsAuthenticated)
+                                {
+                                    <li><a asp-area="Account" asp-controller="Orders" asp-action="Index" data-dd-close="1">Orders</a></li>
+                                    <li><a asp-area="Account" asp-controller="Profile" asp-action="Index" data-dd-close="1">Account Info</a></li>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Logout" data-dd-close="1">Log out</a></li>
                                 }
                                 else
                                 {
-                                    <a class="nav-link text-dark" asp-controller="Stores" asp-action="MyStore">Manage Store</a>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Login" data-dd-close="1">Log In</a></li>
+                                    <li><a asp-area="Account" asp-controller="Authenticate" asp-action="Register" data-dd-close="1">Sign Up</a></li>
                                 }
-
-                                <li class="nav-item">
-                                    Hello @Context.User.Identity.Name
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-controller="Users" asp-action="LogOut">Logout</a>
-                                </li>
-                            }
-                            else
-                            {
-                                <li class="nav-item">
-                                    <a asp-controller="Users" asp-action="LogIn">Log In</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a asp-controller="Users" asp-action="Create">Register</a>
-                                </li>
-
-                            }
-                        }
-                    </ul>
+                                <li class="dropdown-divider m-3"></li>
+                                <li class="dropdown-sm"><a href="#" role="button" id="main-currency-btn" data-dd-mega-to="#main-currency-menu">Currency: <span class="font-weight-bold" data-updatable>@ClientCurrency.Currency.Code</span></a></li>
+                            </ul>
+                            <ul id="main-currency-menu" data-currency-set-link="@Url.Action("UpdateClientCurrency", "Preferences", new { area = "" })">
+                                <li class="dropdown-header"><a href="#" role="button" data-dd-mega-to="#main-profile-menu"><span class="icon icon-arrow-left3" aria-hidden="true"></span></a><span>Currency</span></li>
+                                @foreach (var currency in ClientCurrency.Options.SupportedCurrencies)
+                                {
+                                    <li>
+                                        <a href="#" role="button" data-currency-set="@currency.Code" data-currency-set-symbol="@currency.Symbol" class="d-flex justify-content-between align-items-center">
+                                            <span class="line-height-2">@currency.ToString()</span>
+                                            @if (currency == ClientCurrency.Currency)
+                                            {
+                                                <span data-dd-check class="float-right m-0 txt-accent icon icon-checkmark2" aria-hidden="true"></span>
+                                            }
+                                        </a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" role="button" data-toggle="modal" data-target="#wishlist-modal"><span class="icon icon-heart" aria-hidden="true"></span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="icon icon-cart" aria-hidden="true"></span><span class="count" id="mini-cart-counter" @(ClientCart.IsEmpty() ? "style=display:none;" : "")>@ClientCart.Count()</span></a>
+                        <div id="mini-cart" class="dropdown-menu dropdown-menu-right dropdown-nav" data-dd-close="0" data-mini-cart-set-link="@Url.Action("MiniCartSet", "Cart", new { area = "Shop" })" data-mini-cart-remove-link="@Url.Action("MiniCartRemove", "Cart", new { area = "Shop" })">
+                            <div class="mini-cart-wrapper" @(ClientCart.IsEmpty() ? "style=display:none;" : "" )>
+                                <div class="mini-cart-items">
+                                    @if (!ClientCart.IsEmpty())
+                                    {
+                                        foreach (var cartProduct in ClientCart.Cart.Products)
+                                        {
+                                            <div class="single-mini-product">
+                                                <figure>
+                                                    <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@cartProduct.Product.Id" data-dd-close="1">
+                                                        <img src="@cartProduct.Product.ImagePath" alt="@cartProduct.Product.Name" />
+                                                    </a>
+                                                </figure>
+                                                <div class="product-details">
+                                                    <h2><a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@cartProduct.Product.Id" data-dd-close="1">@cartProduct.Product.Name</a></h2>
+                                                    <div class="quantity-x-price">
+                                                        <span>@cartProduct.Quantity</span>
+                                                        <span class="multiply">X</span>
+                                                        <span class="price discount">
+                                                            <span class="actual-price @(cartProduct.Product.IsOnSaleNow() ? "txt-accent" : "")">@ClientCurrency.GetPriceAndDisplay(cartProduct.Product.ActualPrice())</span>
+                                                            <span class="regular-price"><strike>@(cartProduct.Product.IsOnSaleNow() ? ClientCurrency.GetPriceAndDisplay(cartProduct.Product.Price) : "")</strike></span>
+                                                        </span>
+                                                    </div>
+                                                    <div class="actions">
+                                                        <button type="button" class="remove-btn" data-remove-from-cart="@cartProduct.Product.Id"><span class="icon icon-remove1" aria-hidden="true"></span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="mini-cart-total">
+                                    <span class="text-uppercase txt-secondary">Total</span>
+                                    <strong id="mini-cart-total" class="text-uppercase">@ClientCurrency.GetPriceAndDisplay(ClientCart.GetTotalPrice())</strong>
+                                </div>
+                                <div class="mini-cart-actions">
+                                    <a asp-area="Shop" asp-controller="Cart" asp-action="Index" data-dd-close="1" class="btn btn-link primary-link shadow-none">View Cart<span class="icon icon-arrow-right4 ml-2" aria-hidden="true"></span></a>
+                                    <a asp-area="Shop" asp-controller="Order" asp-action="Checkout" data-dd-close="1" class="btn outline-primary">Checkout</a>
+                                </div>
+                            </div>
+                            <div class="mini-cart-empty" @(ClientCart.IsEmpty() ? "" : "style=display:none;" )>
+                                <h4 class="text-secondary text-center m-0 py-3">Your cart is empty.</h4>
+                            </div>
+                            @* Single Mini-Cart Item Template *@
+                            <script type="text/html" id="mini-cart-item-template">
+                                <div class="single-mini-product">
+                                    <figure>
+                                        <a href="@Url.Action("Index", "Product", new { area = "Shop", id = "" })/{id}" data-dd-close="1">
+                                            <img src="{imagePath}" alt="{name}" />
+                                        </a>
+                                    </figure>
+                                    <div class="product-details">
+                                        <h2><a href="@Url.Action("Index", "Product", new { area = "Shop", id = "" })/{id}" data-dd-close="1">{name}</a></h2>
+                                        <div class="quantity-x-price">
+                                            <span>{quantity}</span>
+                                            <span class="multiply">X</span>
+                                            <span class="price discount">
+                                                <span class="actual-price">{actualPrice}</span>
+                                                <span class="regular-price"><strike>{regularPrice}</strike></span>
+                                            </span>
+                                        </div>
+                                        <div class="actions">
+                                            <button type="button" class="remove-btn" data-remove-from-cart="{id}"><span class="icon icon-remove1" aria-hidden="true"></span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </script>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </nav>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    @* Wishlist Modal *@
+    <partial name="~/Views/Shared/PartialViews/_WishlistModalPartial.cshtml" />
+
+    @* Content *@
+    <main id="main-content" role="main">
+        @RenderBody()
+    </main>
+
+    @* Main Footer *@
+    <footer id="main-footer">
         <div class="container">
-            &copy; 2021 - Recycle - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="cols">
+                <div class="col store">
+                    <h3>Store</h3>
+                    <ul>
+                        <li><a asp-area="" asp-controller="Home" asp-action="About">About Us</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact Us</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Help">Help</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Terms">Terms &amp; Conditions</a></li>
+                        <li><a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a></li>
+                    </ul>
+                </div>
+                <div class="col social">
+                    <h3>Social</h3>
+                    <ul>
+                        <li><a href="https://www.instagram.com/" target="_blank"><span class="icon icon-instagram" aria-hidden="true"></span>Instagram</a></li>
+                        <li><a href="https://www.facebook.com/" target="_blank"><span class="icon icon-facebook2" aria-hidden="true"></span>Facebook</a></li>
+                        <li><a href="https://www.twitter.com/" target="_blank"><span class="icon icon-twitter" aria-hidden="true"></span>Twitter</a></li>
+                        <li><a href="https://www.yotube.com/" target="_blank"><span class="icon icon-youtube" aria-hidden="true"></span>YouTube</a></li>
+                    </ul>
+                </div>
+                <div class="col contact">
+                    <h3>Contact us</h3>
+                    <p class="line-height-1-5">Recycle Store<br>Elie Wiesel St 2<br>Rishon LeTsiyon</p>
+                    <p><span class="icon icon-mail" aria-hidden="true"></span><a href="mailto:support@recycle.com">support@recycle.com</a></p>
+                </div>
+                <div class="col newsletter">
+                    <h3>Join our newsletter</h3>
+                    <p>Get update on new products!</p>
+                    <partial name="~/Views/Shared/PartialViews/_NewsletterSubscriptionPartial.cshtml" model="new SubscribeVM()" />
+                </div>
+            </div>
+            <p class="copyright">&copy; @DateTime.Now.Year Recycle. All rights reserved.</p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <partial name="~/Views/Shared/_ValidationScriptsPartial.cshtml" />
+    <script>
+        var clientCart = @Html.Raw(ClientCart.IsEmpty() ? "[]" : Json.Serialize(ClientCart.Cart.Products.Select(p => new
+                    {
+                        id = p.Product.Id,
+                        name = p.Product.Name,
+                        imagePath = p.Product.ImagePath,
+                        actualPrice = ClientCurrency.GetPriceAndDisplay(p.Product.ActualPrice()),
+                        regularPrice = (p.Product.IsOnSaleNow() ? ClientCurrency.GetPriceAndDisplay(p.Product.Price) : null),
+                        quantity = p.Quantity
+                    })).ToString());
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

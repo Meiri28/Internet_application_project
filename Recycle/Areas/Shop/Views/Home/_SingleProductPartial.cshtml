@@ -1,0 +1,52 @@
+﻿@inject Recycle.App_Custom.Services.ClientCurrency.ClientCurrencyService ClientCurrency
+
+@model Recycle.Models.Product
+
+@{
+    var cartProductInfoJSON = Json.Serialize(new
+    {
+        id = Model.Id,
+        name = Model.Name,
+        imagePath = Model.ImagePath,
+        actualPrice = ClientCurrency.GetPriceAndDisplay(Model.ActualPrice()),
+        regularPrice = (Model.IsOnSaleNow() ? ClientCurrency.GetPriceAndDisplay(Model.Price) : null)
+    }).ToString();
+}
+
+<div class="col-xl-3 col-sm-4 col-6">
+    <div class="shop-product">
+        <div class="shop-product-img">
+            <a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@Model.Id">
+                <img src="@Model.ImagePath" alt="@Model.Name" />
+            </a>
+            <div class="overlap-container pe-none">
+                <div class="d-flex @(Model.IsOnSaleNow() ? "justify-content-between" : "justify-content-end") align-items-start">
+                    @if (Model.IsOnSaleNow())
+                    {
+                        <span class="tag tag-danger txt-md text-uppercase px-4 m-3">@Html.DisplayFor(m => Model.Sale.DiscountRate) Off</span>
+                    }
+                    <div class="shop-product-actions">
+                        <button type="button" class="primary-link" data-toggle="tooltip" data-placement="left" title="Add to Cart" data-add-to-cart="@cartProductInfoJSON"><span class="icon icon-plus icon-top-adjust"></span></button>
+                        <button type="button" class="primary-link" data-toggle="tooltip" data-placement="left" title="Add to Wishlist" data-add-to-wishlist="@cartProductInfoJSON"><span class="icon icon-heart icon-top-adjust"></span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="shop-product-details">
+            <div class="shop-product-title"><a asp-area="Shop" asp-controller="Product" asp-action="Index" asp-route-id="@Model.Id" class="primary-link">@Model.Name</a></div>
+            @if (Model.IsOnSaleNow())
+            {
+                <div class="shop-product-price discount">
+                    <span class="actual-price">@ClientCurrency.GetPriceAndDisplay(Model.ActualPrice())</span>
+                    <span class="regular-price"><strike>@ClientCurrency.GetPriceAndDisplay(Model.Price)</strike></span>
+                </div>
+            }
+            else
+            {
+                <div class="shop-product-price">
+                    <span class="actual-price">@ClientCurrency.GetPriceAndDisplay(Model.Price)</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
