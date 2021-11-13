@@ -49,6 +49,7 @@ namespace Recycle.Areas.Admin.ViewModels.Products
         [Required(ErrorMessage = "Availability is required.")]
         public bool IsAvailable { get; set; }
 
+        public int StoreId { get; set; }
 
         #region Relationships
 

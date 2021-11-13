@@ -63,6 +63,13 @@
                                 <span asp-validation-for="SaleId" class="text-danger"></span>
                             </div>
                             <div class="single-form-item">
+                                <label asp-for="StoreId"></label>
+                                <select asp-for="StoreId" class="i-txt bg-input-txt" asp-items="ViewBag.Stores">
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="SaleId" class="text-danger"></span>
+                            </div>
+                            <div class="single-form-item">
                                 <div class="custom-control custom-checkbox py-3">
                                     <input asp-for="IsAvailable" class="custom-control-input" />
                                     <label asp-for="IsAvailable" class="custom-control-label txt-primary"></label>

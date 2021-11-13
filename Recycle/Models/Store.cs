@@ -77,6 +77,8 @@ namespace Recycle.Models
         /// User who owns the store
         /// </summary>
         public User User { get; set; }
+
+        public int UserId { get; set; }
         #endregion
 
     }

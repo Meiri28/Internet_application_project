@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Recycle.Services;
 
 namespace Recycle.Areas.Seller.Controllers
 {
@@ -18,17 +19,23 @@ namespace Recycle.Areas.Seller.Controllers
     public class StoresController : Controller
     {
         private readonly RecycleContext _dbContext;
+        private readonly UserIdentityService _userIdentity;
 
-        public StoresController(RecycleContext dbContext)
+        public StoresController(RecycleContext dbContext, UserIdentityService userIdentity)
         {
             _dbContext = dbContext;
+            _userIdentity = userIdentity;
         }
 
         // GET: /Seller/Stores
         public async Task<IActionResult> Index(IndexVM model)
         {
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
             List<Store> Stores = await _dbContext.Stores
-                .Where(b => (model.Query == null) || b.Name.Contains(model.Query))
+                .Where(b => ((model.Query == null) || b.Name.Contains(model.Query)) && ((b.UserId == null) ||(b.UserId == (int)userId)) ) 
                 .OrderBy(b => b.Name)
                 .ToListAsync();
 
@@ -77,6 +84,10 @@ namespace Recycle.Areas.Seller.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
             Store Store = new Store()
             {
                 Name = model.Name,
@@ -84,7 +95,8 @@ namespace Recycle.Areas.Seller.Controllers
                 PhoneNumber = model.PhoneNumber,
                 OpeningHours = model.OpeningHours,
                 LocationLatitude = model.LocationLatitude,
-                LocationLongitude = model.LocationLongitude
+                LocationLongitude = model.LocationLongitude,
+                UserId = (int)userId
             };
             _dbContext.Stores.Add(Store);
             await _dbContext.SaveChangesAsync();

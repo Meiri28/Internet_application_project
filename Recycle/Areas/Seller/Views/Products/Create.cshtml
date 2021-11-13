@@ -1,4 +1,4 @@
-﻿@model Recycle.Areas.Admin.ViewModels.Products.CreateVM
+﻿@model Recycle.Areas.Seller.ViewModels.Products.CreateVM
 
 @{
     ViewData["Title"] = "Create Product";
@@ -7,16 +7,11 @@
 <section class="bg-light-2">
     <div class="sec-container">
         <div class="maxw-2xl m-auto">
-            <ul class="breadcrumb p-0 mb-5">
-                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Home" asp-action="Index" class="primary-link"><u>Admin</u></a></li>
-                <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Products" asp-action="Index" class="primary-link"><u>Products</u></a></li>
-                <li class="breadcrumb-item">Create</li>
-            </ul>
             <h1 class="title-1 font-weight-bold mb-5">Create Product</h1>
             <div class="form-container bg-white mb-5">
                 <div class="row">
                     <div class="col-lg-6">
-                        <form asp-area="Admin" asp-controller="Products" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <form asp-area="Seller" asp-controller="Products" asp-action="Create" method="post" enctype="multipart/form-data">
                             <div class="single-form-item">
                                 <label asp-for="Name"></label>
                                 <input asp-for="Name" class="i-txt bg-input-txt" autocomplete="off" />
@@ -69,26 +64,22 @@
                                 <span asp-validation-for="SaleId" class="text-danger"></span>
                             </div>
                             <div class="single-form-item">
+                                <label asp-for="StoreId"></label>
+                                <select asp-for="StoreId" class="i-txt bg-input-txt" asp-items="ViewBag.Stores">
+                                    <option selected></option>
+                                </select>
+                                <span asp-validation-for="SaleId" class="text-danger"></span>
+                            </div>
+                            <div class="single-form-item">
                                 <div class="custom-control custom-checkbox py-3">
                                     <input asp-for="IsAvailable" class="custom-control-input" />
                                     <label asp-for="IsAvailable" class="custom-control-label txt-primary"></label>
                                 </div>
                             </div>
-                            <div class="single-form-item">
-                                <div class="custom-control custom-checkbox py-3">
-                                    <input asp-for="Tweet" data-check-toggle-target="#tweet-textarea" class="custom-control-input" />
-                                    <label asp-for="Tweet" class="custom-control-label txt-primary"></label>
-                                </div>
-                            </div>
-                            <div class="single-form-item" id="tweet-textarea" data-check-toggle-state="@(Model.Tweet ? "1" : "0")">
-                                <label asp-for="TweetText"></label>
-                                <textarea asp-for="TweetText" class="i-txt bg-input-txt" cols="6" rows="3"></textarea>
-                                <span asp-validation-for="TweetText" class="text-danger"></span>
-                            </div>
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="d-flex flex-wrap justify-content-between align-items-center flex-column-reverse flex-sm-row mt-3">
-                                <a asp-area="Admin" asp-controller="Products" asp-action="Index" class="btn align-self-stretch m-2"><span class="icon icon-arrow-left icon-top-adjust mr-3" aria-hidden="true"></span>Back to List</a>
-                                <button type="submit" class="btn btn-primary align-self-stretch px-5 m-2" data-submit-loader>Create<span class="icon icon-arrow-right1 icon-top-adjust ml-3" aria-hidden="true"></span></button>
+                                <a asp-area="Seller" asp-controller="Products" asp-action="Index" class="btn align-self-stretch m-2">Back</a>
+                                <button type="submit" class="btn btn-primary align-self-stretch px-5 m-2" data-submit-loader>Create</button>
                             </div>
                         </form>
                     </div>
@@ -116,18 +107,6 @@
                 } else {
                     $('#product-image').hide();
                     $('#product-icon').show();
-                }
-            });
-
-            $('#@Html.IdFor(m => m.Tweet)').click(function () {
-                // Shows a default text:
-                let $tweetText = $('#@Html.IdFor(m => m.TweetText)');
-                let $name = $('#@Html.IdFor(m => m.Name)');
-                let url = '@Url.Action("Index", "Product", new { area = "Shop", name = "(name)" })';
-
-                if ($name.val()) {
-                    url = ('https://www.recycle.com' + url.replace('(name)', $name.val().replaceAll(' ', '+')));
-                    $tweetText.text('New in Recycle! ' + $name.val() + ' - Get now: ' + url);
                 }
             });
         });

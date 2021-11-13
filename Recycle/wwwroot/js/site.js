@@ -18,7 +18,7 @@ Table of Contents:
 ----------------------------------------------*/
 var AppKeys = {
     Cookies: {
-        ClientCurrency: "userCurrency",
+        ClientCurrency: "currency",
         ClientCart: "userCart"
     }
 };

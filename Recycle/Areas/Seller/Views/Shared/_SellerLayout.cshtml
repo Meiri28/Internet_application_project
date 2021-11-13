@@ -17,10 +17,10 @@
     <header id="main-header" class="fixed-top">
         <div class="lay-wrapper">
             <div class="lay-left">
-                <h1 id="main-Seller-logo">
+                <h1 id="main-admin-logo">
                     <a asp-area="Seller" asp-controller="Home" asp-action="Index">
                         <span class="logo"></span>
-                        <span>| Seller</span>
+                        <span> Seller</span>
                     </a>
                 </h1>
                 <button id="main-menu-toggler" class="text-shadow" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Menu">
@@ -31,7 +31,7 @@
                 <nav id="main-menu">
                     <ul class="header-list links-text-shadow">
                         <li><a asp-area="Seller" asp-controller="Orders" asp-action="Index">Orders</a></li>
-                        <li><a asp-area="Seller" asp-controller="Contacts" asp-action="Index">Contacts</a></li>
+                        <li><a asp-area="Seller" asp-controller="Stores" asp-action="Index">Stores</a></li>
                         <li class="dropdown-show">
                             <a>Shop</a>
                             <ul class="dropdown-nav category-list">
@@ -39,7 +39,6 @@
                                 <li><a asp-area="Seller" asp-controller="Sales" asp-action="Index">Sales</a></li>
                                 <li><a asp-area="Seller" asp-controller="ProductCategories" asp-action="Index">Product Categories</a></li>
                                 <li><a asp-area="Seller" asp-controller="ProductTypes" asp-action="Index">Product Types</a></li>
-                                <li><a asp-area="Seller" asp-controller="DeliveryMethods" asp-action="Index">Delivery Methods</a></li>
                             </ul>
                         </li>
                     </ul>

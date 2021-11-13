@@ -68,6 +68,7 @@ namespace Recycle.Areas.Admin.Controllers
             ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name));
             ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name));
             ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name));
+            ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name));
             return View(model);
         }
 
@@ -89,6 +90,7 @@ namespace Recycle.Areas.Admin.Controllers
             ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name));
             ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name));
             ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name));
+            ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name));
             return View(new CreateVM()
             {
                 IsAvailable = true,
@@ -105,6 +107,7 @@ namespace Recycle.Areas.Admin.Controllers
                 ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name), model.CategoryId);
                 ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name), model.TypeId);
                 ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name), model.SaleId);
+                ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name), model.StoreId);
                 return View(model);
             }
 
@@ -120,7 +123,8 @@ namespace Recycle.Areas.Admin.Controllers
                 IsAvailable = model.IsAvailable,
                 CategoryId = model.CategoryId,
                 TypeId = model.TypeId,
-                SaleId = model.SaleId
+                SaleId = model.SaleId,
+                StoreId = model.StoreId
             };
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
@@ -142,6 +146,7 @@ namespace Recycle.Areas.Admin.Controllers
                 ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name), product.CategoryId);
                 ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name), product.TypeId);
                 ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name), product.SaleId);
+                ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name), product.StoreId);
                 return View(new EditVM()
                 {
                     Id = product.Id,
@@ -153,7 +158,8 @@ namespace Recycle.Areas.Admin.Controllers
                     IsAvailable = product.IsAvailable,
                     CategoryId = product.CategoryId,
                     TypeId = product.TypeId,
-                    SaleId = product.SaleId
+                    SaleId = product.SaleId,
+                    StoreId = product.StoreId,
                 });
             }
         }
@@ -175,6 +181,7 @@ namespace Recycle.Areas.Admin.Controllers
                 ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name), product.CategoryId);
                 ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name), product.TypeId);
                 ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name), product.SaleId);
+                ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name), product.StoreId);
                 return View(model);
             }
 
@@ -199,6 +206,7 @@ namespace Recycle.Areas.Admin.Controllers
             product.TypeId = model.TypeId;
             product.SaleId = model.SaleId;
             product.DateLastModified = DateTime.Now;
+            product.StoreId = model.StoreId;
 
             _dbContext.Products.Update(product);
             await _dbContext.SaveChangesAsync();

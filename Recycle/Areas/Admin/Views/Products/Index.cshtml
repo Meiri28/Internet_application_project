@@ -90,6 +90,7 @@
                                                 <img src="@product.ImagePath" alt="@product.Name" class="row-image" />
                                             </a>
                                             <a asp-area="Admin" asp-controller="Products" asp-action="Details" asp-route-id="@product.Id" class="primary-link font-weight-bold text-ellipsis d-inline-block">@product.Name</a>
+                                            <a asp-area="Admin" asp-controller="Stores" asp-action="Details" asp-route-id="@product.StoreId" class="primary-link font-weight-bold text-ellipsis d-inline-block">(Store id - @product.StoreId)</a>
                                         </div>
                                         <div class="col-md-5 text-center">
                                             <div class="py-3">@product.Category.Name | @product.Type.Name</div>

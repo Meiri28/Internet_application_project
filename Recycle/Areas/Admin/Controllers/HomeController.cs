@@ -45,20 +45,6 @@ namespace Recycle.Areas.Admin.Controllers
             // Gets the number of new customers (in this period):
             ViewData["Results_NewCustomers"] = await _dbContext.Users.Where(u => u.DateRegistered >= fromDate && u.Role == UserRole.Customer).CountAsync();
 
-            // Gets the best selling products (how many times a product was ordered):
-            var bestSellingQuery = await (from order in _dbContext.Orders
-                                          where order.DateCreated >= fromDate
-                                          join op in _dbContext.OrdersVsProducts on order.Id equals op.OrderId
-                                          join product in _dbContext.Products on op.ProductId equals product.Id
-                                          group order.Id by product.Name into grp
-                                          orderby grp.Count() descending
-                                          select new
-                                          {
-                                              ProductName = grp.Key,
-                                              OrderCount = grp.Count().ToString()
-                                          }).Take(10).ToListAsync();
-            ViewData["Results_BestSelling"] = bestSellingQuery.ToDictionary(d => d.ProductName, d => d.OrderCount);
-            ViewData["Results_BestSelling_Top3"] = bestSellingQuery.Take(3).Select(d => d.ProductName).ToArray();
 
             // Gets all the orders related to the specified period:
             List<Order> orders = await _orders.GetAllFromDateTime(fromDate);
