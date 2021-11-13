@@ -122,6 +122,8 @@ namespace Recycle.Models
         /// <remarks>[Relationship: Many-to-Many]</remarks>
         public List<OrderVsProduct> OrderProducts { get; set; }
 
+        public int StoreId { get; set; }
+
         #endregion
 
         #region Public API

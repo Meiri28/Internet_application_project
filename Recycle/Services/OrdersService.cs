@@ -58,7 +58,7 @@ namespace Recycle.Services
         /// <param name="dateCreated">The date the orders created to search.</param>
         /// <param name="orderId">The id of the order to search.</param>
         /// <returns>Returns the list of orders matching the specified search parameters.</returns>
-        public async Task<List<Order>> Search(OrderStatus? status, DateTime? dateCreated, string orderId)
+        public async Task<List<Order>> Search(OrderStatus? status, DateTime? dateCreated, string orderId, int userId = 0)
         {
             if (!string.IsNullOrEmpty(orderId))
             {

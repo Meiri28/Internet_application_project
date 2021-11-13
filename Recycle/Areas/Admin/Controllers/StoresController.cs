@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Recycle.Services;
 
 namespace Recycle.Areas.Admin.Controllers
 {
@@ -18,10 +19,12 @@ namespace Recycle.Areas.Admin.Controllers
     public class StoresController : Controller
     {
         private readonly RecycleContext _dbContext;
+        private readonly UserIdentityService _userIdentity;
 
-        public StoresController(RecycleContext dbContext)
+        public StoresController(RecycleContext dbContext, UserIdentityService userIdentity)
         {
             _dbContext = dbContext;
+            _userIdentity = userIdentity;
         }
 
         // GET: /Admin/Stores
@@ -77,6 +80,10 @@ namespace Recycle.Areas.Admin.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
             Store Store = new Store()
             {
                 Name = model.Name,
@@ -84,7 +91,8 @@ namespace Recycle.Areas.Admin.Controllers
                 PhoneNumber = model.PhoneNumber,
                 OpeningHours = model.OpeningHours,
                 LocationLatitude = model.LocationLatitude,
-                LocationLongitude = model.LocationLongitude
+                LocationLongitude = model.LocationLongitude,
+                UserId = (int)userId
             };
             _dbContext.Stores.Add(Store);
             await _dbContext.SaveChangesAsync();
@@ -107,7 +115,7 @@ namespace Recycle.Areas.Admin.Controllers
                     PhoneNumber = Store.PhoneNumber,
                     OpeningHours = Store.OpeningHours,
                     LocationLatitude = Store.LocationLatitude,
-                    LocationLongitude = Store.LocationLongitude
+                    LocationLongitude = Store.LocationLongitude,
                 });
         }
 

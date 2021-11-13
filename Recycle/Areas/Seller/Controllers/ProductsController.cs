@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Recycle.Services;
 
 namespace Recycle.Areas.Seller.Controllers
 {
@@ -27,22 +28,39 @@ namespace Recycle.Areas.Seller.Controllers
         private readonly RecycleContext _dbContext;
         private readonly IWebHostEnvironment _hostEnvironment;
         private readonly IConfiguration _configuration;
+        private readonly UserIdentityService _userIdentity;
 
-        public ProductsController(RecycleContext dbContext, IWebHostEnvironment hostEnvironment, IConfiguration configuration)
+        public ProductsController(RecycleContext dbContext, IWebHostEnvironment hostEnvironment, IConfiguration configuration, UserIdentityService userIdentity)
         {
             _dbContext = dbContext;
             _hostEnvironment = hostEnvironment;
             _configuration = configuration;
+            _userIdentity = userIdentity;
         }
 
         // GET: /Seller/Products
         public async Task<IActionResult> Index(IndexVM model)
         {
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
+            // user can craete only one store
+            var Stores = await _dbContext.Stores
+                .Where(b => (b.UserId == (int)userId))
+                .Select(b => b.Id)
+                .ToListAsync();
+
+            if (Stores == null) 
+                return NotFound();
+
+
             List<Product> products = await _dbContext.Products
                 .Where(p => ((model.Query == null) || p.Name.Contains(model.Query) || p.Description.Contains(model.Query)) &&
                             ((model.CategoryId == null) || p.CategoryId == model.CategoryId) &&
                             ((model.TypeId == null) || p.TypeId == model.TypeId) &&
-                            ((model.SaleId == null) || p.SaleId == model.SaleId))
+                            ((model.SaleId == null) || p.SaleId == model.SaleId) &&
+                            ( p.StoreId == Stores[0] ) )
                 .OrderByDescending(p => p.DateLastModified)
                 .Include(p => p.Category).Include(p => p.Type).Include(p => p.Sale)
                 .ToListAsync();
@@ -86,13 +104,17 @@ namespace Recycle.Areas.Seller.Controllers
         // GET: /Seller/Products/Create
         public IActionResult Create()
         {
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
             ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name));
             ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name));
             ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name));
+            ViewData["Stores"] = new SelectList(_dbContext.Stores.Where(s => s.UserId == userId), nameof(Store.Id), nameof(Store.Name));
             return View(new CreateVM()
             {
                 IsAvailable = true,
-                Tweet = false
             });
         }
 
@@ -101,11 +123,22 @@ namespace Recycle.Areas.Seller.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateVM model)
         {
+
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
+            List<Store> Stores = await _dbContext.Stores
+                .Where(b => ((b.UserId == null) || (b.UserId == (int)userId)))
+                .OrderBy(b => b.Name)
+                .ToListAsync();
+
             if (!ModelState.IsValid)
             {
                 ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name), model.CategoryId);
                 ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name), model.TypeId);
                 ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name), model.SaleId);
+                ViewData["Stores"] = new SelectList(Stores, nameof(Store.Id), nameof(Store.Name), model.StoreId);
                 return View(model);
             }
 
@@ -121,7 +154,8 @@ namespace Recycle.Areas.Seller.Controllers
                 IsAvailable = model.IsAvailable,
                 CategoryId = model.CategoryId,
                 TypeId = model.TypeId,
-                SaleId = model.SaleId
+                SaleId = model.SaleId,
+                StoreId = model.StoreId
             };
             _dbContext.Products.Add(product);
             await _dbContext.SaveChangesAsync();
@@ -143,6 +177,7 @@ namespace Recycle.Areas.Seller.Controllers
                 ViewData["ProductCategories"] = new SelectList(_dbContext.ProductCategories, nameof(ProductCategory.Id), nameof(ProductCategory.Name), product.CategoryId);
                 ViewData["ProductTypes"] = new SelectList(_dbContext.ProductTypes, nameof(ProductType.Id), nameof(ProductType.Name), product.TypeId);
                 ViewData["Sales"] = new SelectList(_dbContext.Sales, nameof(Sale.Id), nameof(Sale.Name), product.SaleId);
+                ViewData["Stores"] = new SelectList(_dbContext.Stores, nameof(Store.Id), nameof(Store.Name), product.StoreId);
                 return View(new EditVM()
                 {
                     Id = product.Id,
@@ -154,7 +189,8 @@ namespace Recycle.Areas.Seller.Controllers
                     IsAvailable = product.IsAvailable,
                     CategoryId = product.CategoryId,
                     TypeId = product.TypeId,
-                    SaleId = product.SaleId
+                    SaleId = product.SaleId,
+                    StoreId = product.StoreId
                 });
             }
         }

@@ -16,15 +16,21 @@ namespace Recycle.Areas.Seller.Controllers
     public class OrdersController : Controller
     {
         private readonly OrdersService _orders;
+        private readonly UserIdentityService _userIdentity;
 
-        public OrdersController(OrdersService orders)
+        public OrdersController(OrdersService orders, UserIdentityService userIdentity)
         {
             _orders = orders;
+            _userIdentity = userIdentity;
         }
 
         // GET: /Seller/Orders
         public async Task<IActionResult> Index(IndexVM model)
         {
+            int? userId = _userIdentity.GetCurrentId();
+            if (userId == null)
+                return NotFound();
+
             List<Order> orders = await _orders.Search(model.Status, model.DateCreated, model.OrderId);
 
             #region Pagination...

@@ -27,5 +27,7 @@ namespace Recycle.Areas.Admin.ViewModels.Stores
         [Remote("CheckNameEditAvailability", "Stores", "Admin", AdditionalFields = nameof(CurrentName), ErrorMessage = "Name already taken.")]
         public new string Name { get; set; }
 
+        public int UserId { get; set; }
+
     }
 }

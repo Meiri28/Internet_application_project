@@ -16,7 +16,7 @@ namespace Recycle.Areas.Seller.ViewModels.Products
 
         [Display(Name = "On Sale")]
         public int? SaleId { get; set; }
-
+        public int? StoreId { get; set; }
         public int? PageSize { get; set; }
         public int Page { get; set; }
 

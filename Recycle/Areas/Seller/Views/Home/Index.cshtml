@@ -24,10 +24,10 @@
                 <h1 class="title-1 font-weight-bold mb-5">Seller Panel</h1>
                 <div class="flex-fill text-right mt-md-4 mb-5">
                     <div class="btn-group ml-sm-5" role="group" aria-label="Dashboard Period Selector">
-                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Today" class="btn btn-sm @(Model.Period == Periods.Today ? "btn-primary" : "outline-primary") d-flex align-items-center">Today</a>
-                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisMonth" class="btn btn-sm @(Model.Period == Periods.ThisMonth ? "btn-primary" : "outline-primary") d-flex align-items-center">This Month</a>
-                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisYear" class="btn btn-sm @(Model.Period == Periods.ThisYear ? "btn-primary" : "outline-primary") d-flex align-items-center">This Year</a>
-                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Lifetime" class="btn btn-sm @(Model.Period == Periods.Lifetime ? "btn-primary" : "outline-primary") d-flex align-items-center">Lifetime</a>
+                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Today" class="btn btn-sm @(Model.Period == Periods.Today ? "btn-primary" : "outline-primary") d-flex align-items-center">Now</a>
+                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisMonth" class="btn btn-sm @(Model.Period == Periods.ThisMonth ? "btn-primary" : "outline-primary") d-flex align-items-center">Month</a>
+                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.ThisYear" class="btn btn-sm @(Model.Period == Periods.ThisYear ? "btn-primary" : "outline-primary") d-flex align-items-center">Year</a>
+                        <a asp-area="Seller" asp-controller="Home" asp-action="Index" asp-route-period="@Periods.Lifetime" class="btn btn-sm @(Model.Period == Periods.Lifetime ? "btn-primary" : "outline-primary") d-flex align-items-center">All</a>
                     </div>
                 </div>
             </div>

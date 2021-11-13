@@ -55,5 +55,7 @@ namespace Recycle.Areas.Seller.ViewModels.Stores
         [Required(ErrorMessage = "Location longitude is required.")]
         public double LocationLongitude { get; set; }
 
+        public int UserId { get; set; }
+
     }
 }
